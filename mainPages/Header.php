@@ -10,13 +10,16 @@
                     <a class="nav-link" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="#">Admin (Staff)</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
+                    <a class="nav-link" href="#">Admin Room</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link" href="#">Admin Program</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Admin Create Sessions</a>
                 </li>
                 <li class="nav-item">
                     <span class="nav-link">Welcome User</span>
