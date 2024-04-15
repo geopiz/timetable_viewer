@@ -221,6 +221,7 @@ session_start();
             margin-top: 150px;
             margin-bottom: 500px;
         }
+
     </style>
     <link href="\timetable_viewer\css\style.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -244,68 +245,53 @@ session_start();
 
                             <form method="POST">
                                 <tr>
-                                    <th><input type="text" id="name" name="fullName" class="form-control"
-                                               placeholder="Full Name" required></th>
-                                    <th class="align-middle text-center"><?php echo date("Y-m-d"); ?></th>
+                                    <th><input type="text" id="name" name="roomName" class="form-control"
+                                               placeholder="Add Room Name" required></th>
+
                                     <th>
-                                        <select id="department" name="Department" class="form-control">
+                                        <select id="department" name="roomType" class="form-control">
                                             <?php
                                             include "config.php";
                                             // Query to fetch department names from the database
-                                            $departmentQuery = "SELECT DepName FROM departments";
-                                            $result = mysqli_query($connect, $departmentQuery);
+                                            $roomTypeQuery = "SELECT distinct RoomType FROM rooms";
+                                            $result = mysqli_query($connect, $roomTypeQuery);
 
                                             // Loop through each row and create an option for the dropdown
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                $departmentName = $row['DepName'];
-                                                echo "<option value='$departmentName'>$departmentName</option>";
+                                                $roomType = $row['RoomType'];
+                                                echo "<option value='$roomType'>$roomType</option>";
                                             }
                                             ?>
-
                                         </select>
                                     </th>
-                                    <th><input type="email" id="email" name="E-mail" class="form-control"
-                                               placeholder="E-mail"></th>
-                                    <th><input type="tel" id="phone" name="phone" class="form-control"
-                                               placeholder="Phone"></th>
+                                    <th><input type="number" name="capacity" class="form-control"
+                                               placeholder="Capacity max 100" max="100"></th>
                                     <th>
-                                        <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
-                                            User
+                                        <button type="submit" class="btn btn-primary btn-lg" name="addNewUser"> Add New Room
                                         </button>
                                     </th>
                                 </tr>
                             </form>
 
-
-
-
                         <?php
                         if (isset($_POST['addNewUser'])) {
                             // Handle form submission to add new user
-                            $fullName = $_POST["fullName"];
-                            $date = date("Y-m-d");
-                            $Department = $_POST["Department"];
-                            $Email = $_POST["E-mail"];
-                            $phone = $_POST["phone"];
+                            $roomName = $_POST["roomName"];
+                            $roomType = $_POST["roomType"];
+                            $roomCapacity = $_POST["capacity"];
                             include "config.php";
 
-                            $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
-                            $db_resultDptID = mysqli_query($connect, $queryDptID);
-                            $db_dpID = mysqli_fetch_assoc($db_resultDptID);
-                            $departmentID = $db_dpID['DepartmentID'];
-
-
                             // Insert new user into the database
-                            $newUser = "INSERT INTO lecturers(LectName, CreatedDate, DepartmentID, LectEmail, Lectphone)
-                VALUES('$fullName', '$date','$departmentID', '$Email', '$phone')";
+                            $newUser = "INSERT INTO rooms(RoomName, RoomType, RoomCapacity)
+                VALUES('$roomName', '$roomType','$roomCapacity')";
 
                             $created = mysqli_query($connect, $newUser);
                             if ($created) {
                                 // Display a JavaScript popup message
-                                echo "<script>alert('User added successfully!');</script>";
+                                echo "<script>alert('Room added successfully!');</script>";
 
                                 // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'staff.php';</script>";
+                                echo "<script>window.location.href = 'rooms.php';</script>";
                                 exit();
                             } else {
                                 die("Can not connect to server ⛔");
@@ -315,36 +301,33 @@ session_start();
 
 
                         <tr>
-                            <th><span>Staff Name</span></th>
-                            <th><span>Date Join</span></th>
-                            <th><span>Department</span></th>
-                            <th class="text-center"><span>E-mail</span></th>
-                            <th><span>Phone</span></th>
-                            <th><span>Delete User</span></th>
+                            <th><span>Room Name</span></th>
+
+                            <th><span>Room Type</span></th>
+                            <th><span>Room Capacity</span></th>
+                            <th><span>Delete Room</span></th>
                         </tr>
                         </thead>
 
-                        <form action="staff.php" method="POST">
+                        <form action="rooms.php" method="POST">
 
                         </form>
 
                         <?php  /* Staff Table   */
                         include "config.php";
 
-                        $query = "SELECT * FROM lecturers JOIN departments ON lecturers.DepartmentID = departments.DepartmentID";
-                        $db_staffInfo = mysqli_query($connect, $query);
-                        $db_staff = mysqli_fetch_assoc($db_staffInfo);
+                        $query = "SELECT * FROM rooms";
+                        $db_roomInfo = mysqli_query($connect, $query);
+                        $db_room = mysqli_fetch_assoc($db_roomInfo);
 
 
                         echo "<tbody>";
 
 
-                        foreach ($db_staffInfo as $db_staff) {
-                            $lectName = $db_staff['LectName'];
-                            $lectDate = $db_staff['CreatedDate'];
-                            $lectDepartment = $db_staff['DepName'];
-                            $lectEmail = $db_staff['LectEmail'];
-                            $lectPhone = $db_staff['LectPhone'];
+                        foreach ($db_roomInfo as $db_room) {
+                            $roomName = $db_room['RoomName'];
+                            $roomType = $db_room['RoomType'];
+                            $roomCapacity = $db_room['RoomCapacity'];
                             $StudentImage = "https://icons.getbootstrap.com/icons/person/#";
                             //Staff img
 
@@ -352,29 +335,24 @@ session_start();
                             echo "<tr>";
 
                             echo "<td>";
-                            echo "<a href='#' class='user-link'>$lectName</a>";
 
-                            echo "</td>";
+                            echo "<a href='#' class='user-link'>$roomName</a>";
 
-                            echo "<td>";
-                            echo "$lectDate";
                             echo "</td>";
 
                             echo "<td class='text-center'>";
-                            echo "<span class='label label-default'>$lectDepartment</span>";
+                            echo "<span class='label label-default'>$roomType</span>";
                             echo "</td>";
 
                             echo "<td>";
-                            echo "<a href='#'>$lectEmail</a>";
+                            echo "<span>$roomCapacity</span>";
                             echo "</td>";
-                            echo "<td>";
-                            echo "<a href='#'>$lectPhone</a>";
-                            echo "</td>";
+
 
 
                                 echo '<td style="width: 20%;">';
-                                echo '<form action="deletestaff.php" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="LecturerID" value="' . $db_staff['LecturerID'] . '"/>';
+                                echo '<form action="deleterooms.php" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="RoomID" value="' . $db_room['RoomID'] . '"/>';
                                 echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
                                 echo '<a href="#" class="table-link danger">';
                                 echo '<span class="fa-stack">';

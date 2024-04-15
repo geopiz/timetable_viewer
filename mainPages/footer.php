@@ -1,11 +1,7 @@
-<div class="container-footer my-5">
-    <!-- Footer -->
-    <footer
-        class="footer text-center text-lg-start text-white"
-        style="background-color: #45526e"
-    >
+<div class="container">
+    <footer class="footer text-center text-lg-start text-white fixed-bottom" id="myFooter" style="background-color: #45526e; display: none;">
         <!-- Grid container -->
-        <div class="container p-4 pb-0">
+        <div class="container">
             <!-- Section: Links -->
             <section class="">
                 <!--Grid row-->
@@ -84,4 +80,32 @@
     </footer>
     <!-- Footer -->
 </div>
-<!-- End of .container -->
+
+<script>
+    var lastScrollPosition = 0;
+
+    window.addEventListener('scroll', function() {
+        var footer = document.getElementById('myFooter');
+        var scrollPosition = window.innerHeight + window.scrollY;
+
+        if (scrollPosition >= document.body.scrollHeight) {
+            if (scrollPosition > lastScrollPosition) {
+                // User is scrolling down at the bottom
+                footer.style.display = 'block';
+                footer.style.transition = 'opacity 0.5s ease-in-out';
+                footer.style.opacity = '1';
+            } else {
+                // User is scrolling up
+                footer.style.opacity = '0';
+                setTimeout(function() {
+                    footer.style.display = 'none';
+                }, 500); // Delay hiding the footer after opacity transition
+            }
+        } else {
+            footer.style.display = 'none';
+        }
+
+        lastScrollPosition = scrollPosition;
+    });
+</script>
+
