@@ -33,18 +33,20 @@ include "mainPages/Header.php";
         <div class="content">
             <div>
                 <div class="accent-orange-gradient">
-                    <div>Test Lesson</div>
+                    <div>Test Lesson 1</div>
                 </div>
 
             </div>
-            <div></div>
-            <div></div>
-            <div></div>
+            <div> 2</div>
+            <div>3</div>
+            <div>4</div>
+
             <div>
                 <div class="accent-green-gradient">
                     <div>Test Lesson</div>
                 </div>
             </div>
+
             <div class="weekend"></div>
             <div class="weekend"></div>
             <div></div>
