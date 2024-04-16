@@ -10,6 +10,8 @@ session_start();
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
     <style>
         /* USER LIST TABLE */
         .user-list tbody td > img {
@@ -221,9 +223,8 @@ session_start();
             margin-top: 150px;
             margin-bottom: 500px;
         }
+
     </style>
-    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
 <title>Glyndwr University Showcase</title>
@@ -231,7 +232,9 @@ session_start();
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
+
 <?php include '../../timetable_viewer/mainPages/Header.php'; ?>
+
 <div class="container custom-margin-top">
     <div class="row">
         <div class="col-lg-12">
@@ -242,51 +245,75 @@ session_start();
 
                         <!-- Display the button only if the user is an admin -->
 
-                            <form method="POST">
-                                <tr>
-                                    <th><input type="text" id="name" name="fullName" class="form-control"
-                                               placeholder="Full Name" required></th>
-                                    <th class="align-middle text-center"><?php echo date("Y-m-d"); ?></th>
-                                    <th>
-                                        <select id="department" name="Department" class="form-control">
-                                            <?php
-                                            include "config.php";
-                                            // Query to fetch department names from the database
-                                            $departmentQuery = "SELECT DepName FROM departments";
-                                            $result = mysqli_query($connect, $departmentQuery);
+                        <form method="POST">
+                            <tr>
+                                <th><input type="text" id="name" name="fullName" class="form-control"
+                                           placeholder="Full Name" required></th>
+                                <th>
+                                    <?php
+                                    include "config.php";
+                                    ?>
+                                    <select id="department" name="Department" class="form-control"
+                                            onchange="updateProgramme();">
+                                        <option value="">Select a Department</option>
+                                        <?php
+                                        $departmentQuery = "SELECT DepName FROM departments";
+                                        $result = mysqli_query($connect, $departmentQuery);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            $departmentName = htmlspecialchars($row['DepName']);
+                                            echo "<option value='$departmentName'>$departmentName</option>";
+                                        }
+                                        ?>
+                                    </select>
 
-                                            // Loop through each row and create an option for the dropdown
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                $departmentName = $row['DepName'];
-                                                echo "<option value='$departmentName'>$departmentName</option>";
-                                            }
-                                            ?>
+                                </th>
+                                <th>
+                                    <select id="programme" name="programmeName" class="form-control">
+                                        <option value="">Select a Programme</option>
+                                    </select>
 
-                                        </select>
-                                    </th>
-                                    <th><input type="email" id="email" name="E-mail" class="form-control"
-                                               placeholder="E-mail"></th>
-                                    <th><input type="tel" id="phone" name="phone" class="form-control"
-                                               placeholder="Phone"></th>
-                                    <th>
-                                        <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
-                                            User
-                                        </button>
-                                    </th>
-                                </tr>
-                            </form>
+                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                    <script>
+                                        function updateProgramme() {
+                                            var departmentName = $('#department').val();
+
+                                            $.ajax({
+                                                url: 'fetch_programmes.php', // Point to the new dedicated PHP script
+                                                type: 'POST',
+                                                data: {department: departmentName},
+                                                success: function (response) {
+                                                    $('#programme').html(response); // Update the students dropdown
+                                                },
+                                                error: function () {
+                                                    alert('Error fetching students.');
+                                                }
+                                            });
+                                        }
+                                    </script>
 
 
+                                </th>
+                                <th><input type="email" id="email" name="E-mail" class="form-control"
+                                           placeholder="E-mail"></th>
+                                <th><input type="number" id="phone" name="semester" class="form-control"
+                                           placeholder="Semester" max="6"></th>
+                                <th>
+                                    <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
+                                        Student
+                                    </button>
+                                </th>
+                            </tr>
+                        </form>
 
 
                         <?php
                         if (isset($_POST['addNewUser'])) {
                             // Handle form submission to add new user
                             $fullName = $_POST["fullName"];
-                            $date = date("Y-m-d");
                             $Department = $_POST["Department"];
+                            $programme = $_POST["programmeName"];
                             $Email = $_POST["E-mail"];
-                            $phone = $_POST["phone"];
+                            $semester = $_POST["semester"];
                             include "config.php";
 
                             $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
@@ -294,10 +321,15 @@ session_start();
                             $db_dpID = mysqli_fetch_assoc($db_resultDptID);
                             $departmentID = $db_dpID['DepartmentID'];
 
+                            $queryProgID = "Select ProgrammeID from programmes WHERE ProgName = '$programme' ";
+                            $db_resultProgtID = mysqli_query($connect, $queryProgID);
+                            $db_dpID = mysqli_fetch_assoc($db_resultProgtID);
+                            $programmeID = $db_dpID['ProgrammeID'];
+
 
                             // Insert new user into the database
-                            $newUser = "INSERT INTO lecturers(LectName, CreatedDate, DepartmentID, LectEmail, Lectphone)
-                VALUES('$fullName', '$date','$departmentID', '$Email', '$phone')";
+                            $newUser = "INSERT INTO students(StudentName, StudentEmail, ProgrammeID, StudentSemester)
+                VALUES('$fullName', '$Email','$programmeID', '$semester')";
 
                             $created = mysqli_query($connect, $newUser);
                             if ($created) {
@@ -305,7 +337,7 @@ session_start();
                                 echo "<script>alert('User added successfully!');</script>";
 
                                 // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'staff.php';</script>";
+                                echo "<script>window.location.href = 'student.php';</script>";
                                 exit();
                             } else {
                                 die("Can not connect to server ⛔");
@@ -313,77 +345,81 @@ session_start();
                         }
                         ?>
 
-
                         <tr>
-                            <th><span>Staff Name</span></th>
-                            <th><span>Date Join</span></th>
+                            <th><span>Student Name</span></th>
+
                             <th><span>Department</span></th>
+                            <th><span>Programme</span></th>
                             <th class="text-center"><span>E-mail</span></th>
-                            <th><span>Phone</span></th>
+                            <th><span>Semester</span></th>
                             <th><span>Delete User</span></th>
                         </tr>
                         </thead>
 
-                        <form action="staff.php" method="POST">
-
+                        <form action="student.php" method="POST">
                         </form>
 
-                        <?php  /* Staff Table   */
+                        <?php /* Staff Table   */
                         include "config.php";
 
-                        $query = "SELECT * FROM lecturers JOIN departments ON lecturers.DepartmentID = departments.DepartmentID";
-                        $db_staffInfo = mysqli_query($connect, $query);
-                        $db_staff = mysqli_fetch_assoc($db_staffInfo);
+                        // Pagination Variables
+                        $results_per_page = 40;
+                        if (!isset($_GET['page'])) {
+                            $page = 1;
+                        } else {
+                            $page = $_GET['page'];
+                        }
+                        $start_from = ($page - 1) * $results_per_page;
 
+                        $query = "SELECT * FROM students JOIN programmes ON students.ProgrammeID = programmes.ProgrammeID JOIN departments ON programmes.DepartmentID = departments.DepartmentID ORDER BY StudentID DESC LIMIT $start_from, $results_per_page";
+                        $db_studentInfo = mysqli_query($connect, $query);
+                        $db_student = mysqli_fetch_assoc($db_studentInfo);
 
                         echo "<tbody>";
 
-
-                        foreach ($db_staffInfo as $db_staff) {
-                            $lectName = $db_staff['LectName'];
-                            $lectDate = $db_staff['CreatedDate'];
-                            $lectDepartment = $db_staff['DepName'];
-                            $lectEmail = $db_staff['LectEmail'];
-                            $lectPhone = $db_staff['LectPhone'];
-                            $StudentImage = "https://icons.getbootstrap.com/icons/person/#";
-                            //Staff img
-
+                        foreach ($db_studentInfo as $db_student) {
+                            $studentName = $db_student['StudentName'];
+                            $studentEmail = $db_student['StudentEmail'];
+                            $studentDepartment = $db_student['DepName'];
+                            $studentProgram = $db_student['ProgName'];
+                            $studentSemester = $db_student['StudentSemester'];
 
                             echo "<tr>";
 
                             echo "<td>";
-                            echo "<a href='#' class='user-link'>$lectName</a>";
+
+                            echo "<span class='user-link'>$studentName</span>";
 
                             echo "</td>";
 
-                            echo "<td>";
-                            echo "$lectDate";
-                            echo "</td>";
 
                             echo "<td class='text-center'>";
-                            echo "<span class='label label-default'>$lectDepartment</span>";
+                            echo "<span class='label label-default'>$studentDepartment</span>";
+                            echo "</td>";
+                            echo "<td class='text-center'>";
+                            echo "<span class='label label-default'>$studentProgram</span>";
                             echo "</td>";
 
                             echo "<td>";
-                            echo "<a href='#'>$lectEmail</a>";
+                            echo "<a href='mailto:$studentEmail'>$studentEmail</a>";
                             echo "</td>";
                             echo "<td>";
-                            echo "<a href='#'>$lectPhone</a>";
+                            echo "<span>$studentSemester</span>";
                             echo "</td>";
 
 
-                                echo '<td style="width: 20%;">';
-                                echo '<form action="deletestaff.php" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="LecturerID" value="' . $db_staff['LecturerID'] . '"/>';
-                                echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
-                                echo '<a href="#" class="table-link danger">';
-                                echo '<span class="fa-stack">';
-                                echo '<i class="fa fa-square fa-stack-2x"></i>';
-                                echo '<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>';
-                                echo '</span>';
-                                echo '</a>';
-                                echo '</button>';
-                                echo '</form>';
+                            echo '<td style="width: 20%;">';
+                            echo '<form action="deletestudent.php" method="POST" style="display:inline;">';
+                            echo '<input type="hidden" name="StudentID" value="' . $db_student['StudentID'] . '"/>';
+                            echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
+                            echo '<a href="#" class="table-link danger">';
+                            echo '<span class="fa-stack">';
+                            echo '<i class="fa fa-square fa-stack-2x"></i>';
+                            echo '<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>';
+                            echo '</span>';
+                            echo '</a>';
+                            echo '</button>';
+                            echo '</form>';
 
                             echo '</td>';
                             echo "</tr>";
@@ -404,10 +440,40 @@ session_start();
                     </table>
                 </div>
 
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <?php
+                        $sql = "SELECT COUNT(*) AS total FROM students";
+                        $result = mysqli_query($connect, $sql);
+                        $row = mysqli_fetch_assoc($result);
+                        $total_pages = ceil($row["total"] / $results_per_page);
+
+                        if ($page > 1) {
+                            echo "<li class='page-item'><a class='page-link' href='student.php?page=1'>&laquo; First</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='student.php?page=" . ($page - 1) . "'>&lsaquo; Previous</a></li>";
+                        }
+                        echo "<li class='page-item'><a class='page-link' href='student.php?page=$page'>$page</a></li>";
+                        echo "<li class='page-item'><a class='page-link' href='student.php?page=$total_pages'>$total_pages</a></li>";
+                        if ($page < $total_pages) {
+                            echo "<li class='page-item'><a class='page-link' href='student.php?page=" . ($page + 1) . "'>Next &rsaquo;</a></li>";
+                            echo "<li class='page-item'><a class='page-link' href='student.php?page=$total_pages'>Last &raquo;</a></li>";
+                        }
+                        ?>
+                    </ul>
+                </nav>
+                <!-- End Pagination -->
+
             </div>
         </div>
     </div>
 </div>
+
+
+
+
 <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
+
+
 </body>
 </html>

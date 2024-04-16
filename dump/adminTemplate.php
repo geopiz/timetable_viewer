@@ -219,6 +219,7 @@ session_start();
 
         .custom-margin-top {
             margin-top: 150px;
+            margin-bottom: 500px;
         }
         @charset "UTF-8";
         /*!
