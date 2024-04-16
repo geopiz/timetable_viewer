@@ -263,7 +263,7 @@ $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
                     echo "<th>Programme Name</th>";
                     echo "<th>Department</th>";
                     echo "<th>Programme Description</th>";
-                    echo "<th>Programme Duration</th>";
+                    echo "<th>Programme Duration (Years)</th>";
                     echo "</tr>";
                     echo "</thead>";
                     echo "<tbody>";
