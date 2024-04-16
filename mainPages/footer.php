@@ -1,5 +1,5 @@
 <div class="container">
-    <footer class="footer text-center text-lg-start text-white fixed-bottom" id="myFooter" style="background-color: #45526e; display: block;">
+    <footer class="footer text-center text-lg-start text-white fixed-bottom" id="myFooter" style="background-color: #45526e; display: none;">
         <!-- Grid container -->
         <div class="container">
             <!-- Section: Links -->
