@@ -1,6 +1,10 @@
 <?php
 session_start();
+// Check if user is logged in and is an admin
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 ?>
+<?php if ($isAdmin): ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -491,3 +495,4 @@ session_start();
 
 </body>
 </html>
+<?php endif; ?>
