@@ -1,3 +1,8 @@
+<?php
+include 'mainPages\logincheck.php';
+checkUserLoggedIn();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

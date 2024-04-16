@@ -34,8 +34,8 @@ html, body {
     background-color: #45526e;
     color: white;
     display: flex;
+    height: auto;
     justify-content: center; /* Center align content horizontally */
-    padding: 20px 0; /* Add some padding for spacing */
 
 }
 
