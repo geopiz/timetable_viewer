@@ -1,14 +1,14 @@
 <?php
 include "config.php";
 
-if (isset($_POST['LecturerID'])) {
-    $LecturerID = mysqli_real_escape_string($connect, $_POST['LecturerID']);
+if (isset($_POST['RoomID'])) {
+    $RoomID = mysqli_real_escape_string($connect, $_POST['RoomID']);
 
     // Prepare the delete statement to avoid SQL injection
-    $query = "DELETE FROM lecturers WHERE LecturerID = ?";
+    $query = "DELETE FROM rooms WHERE RoomID = ?";
 
     if ($stmt = mysqli_prepare($connect, $query)) {
-        mysqli_stmt_bind_param($stmt, "i", $LecturerID);
+        mysqli_stmt_bind_param($stmt, "i", $RoomID);
 
         // Execute the prepared statement
         mysqli_stmt_execute($stmt);
@@ -18,10 +18,10 @@ if (isset($_POST['LecturerID'])) {
     }
 
     // Redirect back to the students page
-    header("Location: programModules.php");
+    header("Location: rooms.php");
     exit;
 } else {
     // If StudentID isn't set, redirect or show an error
-    echo "Error: StudentID not provided.";
+    echo "Error: RoomID not provided.";
 }
 ?>

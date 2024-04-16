@@ -221,6 +221,7 @@ session_start();
             margin-top: 150px;
             margin-bottom: 500px;
         }
+
     </style>
     <link href="\timetable_viewer\css\style.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -266,7 +267,7 @@ session_start();
                                     </th>
                                     <th><input type="email" id="email" name="E-mail" class="form-control"
                                                placeholder="E-mail"></th>
-                                    <th><input type="tel" id="phone" name="phone" class="form-control"
+                                    <th><input type="text" id="phone" name="phone" class="form-control"
                                                placeholder="Phone"></th>
                                     <th>
                                         <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
@@ -305,7 +306,7 @@ session_start();
                                 echo "<script>alert('User added successfully!');</script>";
 
                                 // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'staff.php';</script>";
+                                echo "<script>window.location.href = 'programModules.php';</script>";
                                 exit();
                             } else {
                                 die("Can not connect to server ⛔");
@@ -324,7 +325,7 @@ session_start();
                         </tr>
                         </thead>
 
-                        <form action="staff.php" method="POST">
+                        <form action="programModules.php" method="POST">
 
                         </form>
 
@@ -352,6 +353,9 @@ session_start();
                             echo "<tr>";
 
                             echo "<td>";
+                            echo '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black" class="bi bi-person" viewBox="0 0 16 16">
+                              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                            </svg>';
                             echo "<a href='#' class='user-link'>$lectName</a>";
 
                             echo "</td>";
@@ -409,5 +413,6 @@ session_start();
     </div>
 </div>
 <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
+?>
 </body>
 </html>
