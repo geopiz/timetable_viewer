@@ -32,7 +32,7 @@
         <li><a class="dropdown-item" href="/students/student.php">Student Panel</a></li>
         <li><a class="dropdown-item" href="/rooms/rooms.php">Room Panel</a></li>
         <li><a class="dropdown-item" href="/ProgramModules/programModules.php">Programme Panel</a></li>
-        <li><a class="dropdown-item" href="/path_to_create_session">Create Session</a></li>
+        <li><a class="dropdown-item" href="/sessions/sessions.php">Create Session</a></li>
     </ul>
 </li>
 
