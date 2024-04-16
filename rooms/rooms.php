@@ -223,7 +223,7 @@ session_start();
         }
 
     </style>
-    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>

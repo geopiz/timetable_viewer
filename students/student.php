@@ -231,7 +231,7 @@ session_start();
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/style.css">
 
 <?php include '../../timetable_viewer/mainPages/Header.php'; ?>
 

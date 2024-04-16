@@ -222,7 +222,7 @@ session_start();
             margin-bottom: 500px;
         }
     </style>
-    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -246,7 +246,6 @@ session_start();
                                 <tr>
                                     <th><input type="text" id="name" name="fullName" class="form-control"
                                                placeholder="Full Name" required></th>
-                                    <th class="align-middle text-center"><?php echo date("Y-m-d"); ?></th>
                                     <th>
                                         <select id="programme" name="Programme" class="form-control">
                                             <?php
@@ -315,7 +314,6 @@ session_start();
 
                         <tr>
                             <th><span>Staff Name</span></th>
-                            <th><span>Date Join</span></th>
                             <th><span>Programme</span></th>
                             <th class="text-center"><span>E-mail</span></th>
                             <th><span>Phone</span></th>
@@ -352,10 +350,6 @@ session_start();
                             echo "<td>";
                             echo "<a href='#' class='user-link'>$lectName</a>";
 
-                            echo "</td>";
-
-                            echo "<td>";
-                            echo "$lectDate";
                             echo "</td>";
 
                             echo "<td class='text-center'>";

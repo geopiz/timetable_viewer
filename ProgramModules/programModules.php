@@ -11,7 +11,6 @@ $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
     <style>
         /* USER LIST TABLE */
         .user-list tbody td > img {
@@ -223,9 +222,8 @@ $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
             margin-top: 150px;
             margin-bottom: 500px;
         }
-
     </style>
-    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -236,7 +234,6 @@ $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
 <link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
 <?php include '../../timetable_viewer/mainPages/Header.php'; ?>
 <div class="container custom-margin-top">  
-
 <form action="" method="POST">
     <div class="form-group">
         <label for="programSelect">Select Program:</label>
@@ -253,13 +250,6 @@ $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
         </select>
     </div>
 </form>
-
-<!-- ... -->
-
-
-
-
-
 <div class="row">
     <div class="col-lg-12">
         <div class="main-box clearfix">
@@ -326,8 +316,6 @@ $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
         </div>
     </div>
 </div>
-
-
 <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
 </body>
 </html>
