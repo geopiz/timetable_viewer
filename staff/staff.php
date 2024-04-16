@@ -248,17 +248,17 @@ session_start();
                                                placeholder="Full Name" required></th>
                                     <th class="align-middle text-center"><?php echo date("Y-m-d"); ?></th>
                                     <th>
-                                        <select id="department" name="Department" class="form-control">
+                                        <select id="programme" name="Programme" class="form-control">
                                             <?php
                                             include "config.php";
-                                            // Query to fetch department names from the database
-                                            $departmentQuery = "SELECT DepName FROM departments";
-                                            $result = mysqli_query($connect, $departmentQuery);
+                                            // Query to fetch programme names from the database
+                                            $programmeQuery = "SELECT ProgName FROM programmes";
+                                            $result = mysqli_query($connect, $programmeQuery);
 
                                             // Loop through each row and create an option for the dropdown
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                $departmentName = $row['DepName'];
-                                                echo "<option value='$departmentName'>$departmentName</option>";
+                                                $programmeName = $row['ProgName'];
+                                                echo "<option value='$programmeName'>$programmeName</option>";
                                             }
                                             ?>
 
@@ -283,21 +283,20 @@ session_start();
                         if (isset($_POST['addNewUser'])) {
                             // Handle form submission to add new user
                             $fullName = $_POST["fullName"];
-                            $date = date("Y-m-d");
-                            $Department = $_POST["Department"];
+                            $Programme = $_POST["Programme"];
                             $Email = $_POST["E-mail"];
                             $phone = $_POST["phone"];
                             include "config.php";
 
-                            $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
+                            $queryDptID = "Select ProgrammeID from programmes WHERE depName = '$Programme' ";
                             $db_resultDptID = mysqli_query($connect, $queryDptID);
                             $db_dpID = mysqli_fetch_assoc($db_resultDptID);
-                            $departmentID = $db_dpID['DepartmentID'];
+                            $programmeID = $db_dpID['ProgrammeID'];
 
 
                             // Insert new user into the database
-                            $newUser = "INSERT INTO lecturers(LectName, CreatedDate, DepartmentID, LectEmail, Lectphone)
-                VALUES('$fullName', '$date','$departmentID', '$Email', '$phone')";
+                            $newUser = "INSERT INTO lecturers(LectName, ProgrammeID, LectEmail, Lectphone)
+                VALUES('$fullName','$programmeID', '$Email', '$phone')";
 
                             $created = mysqli_query($connect, $newUser);
                             if ($created) {
@@ -317,7 +316,7 @@ session_start();
                         <tr>
                             <th><span>Staff Name</span></th>
                             <th><span>Date Join</span></th>
-                            <th><span>Department</span></th>
+                            <th><span>Programme</span></th>
                             <th class="text-center"><span>E-mail</span></th>
                             <th><span>Phone</span></th>
                             <th><span>Delete User</span></th>
@@ -331,7 +330,7 @@ session_start();
                         <?php  /* Staff Table   */
                         include "config.php";
 
-                        $query = "SELECT * FROM lecturers JOIN departments ON lecturers.DepartmentID = departments.DepartmentID";
+                        $query = "SELECT * FROM lecturers JOIN programmes ON lecturers.ProgrammeID = programmes.ProgrammeID";
                         $db_staffInfo = mysqli_query($connect, $query);
                         $db_staff = mysqli_fetch_assoc($db_staffInfo);
 
@@ -341,8 +340,7 @@ session_start();
 
                         foreach ($db_staffInfo as $db_staff) {
                             $lectName = $db_staff['LectName'];
-                            $lectDate = $db_staff['CreatedDate'];
-                            $lectDepartment = $db_staff['DepName'];
+                            $lectProgramme = $db_staff['ProgName'];
                             $lectEmail = $db_staff['LectEmail'];
                             $lectPhone = $db_staff['LectPhone'];
                             $StudentImage = "https://icons.getbootstrap.com/icons/person/#";
@@ -361,7 +359,7 @@ session_start();
                             echo "</td>";
 
                             echo "<td class='text-center'>";
-                            echo "<span class='label label-default'>$lectDepartment</span>";
+                            echo "<span class='label label-default'>$lectProgramme</span>";
                             echo "</td>";
 
                             echo "<td>";

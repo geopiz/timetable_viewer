@@ -7,19 +7,22 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="main.php">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Admin (Staff)</a>
+                    <a class="nav-link" href="staff\staff.php">Staff Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Admin Room</a>
+                    <a class="nav-link" href="students\student.php">Student Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Admin Program</a>
+                    <a class="nav-link" href="rooms/rooms.php">Room Panel</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Admin Create Sessions</a>
+                    <a class="nav-link" href="#">Programme Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Create Session</a>
                 </li>
                 <li class="nav-item">
                     <span class="nav-link">Welcome User</span>

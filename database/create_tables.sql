@@ -1,44 +1,41 @@
 -- Departments Table
 CREATE TABLE Departments (
-    DepartmentID INT PRIMARY KEY,
+    DepartmentID INT,
     DepName VARCHAR(255) NOT NULL,
     DepDescription TEXT
 );
 
 -- Programmes Table
 CREATE TABLE Programmes (
-    ProgrammeID INT PRIMARY KEY,
+    ProgrammeID INT,
     DepartmentID INT,
     ProgName VARCHAR(255) NOT NULL,
     ProgDuration INT,
-    ProgDescription TEXT,
-    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+    ProgDescription TEXT
 );
 
 -- Modules Table
 CREATE TABLE Modules (
-    ModuleID INT PRIMARY KEY,
+    ModuleID INT,
     ProgrammeID INT,
     ModSemester INT,
     ModName VARCHAR(255) NOT NULL,
     ModDescription TEXT,
-    ModDuration INT,
-    FOREIGN KEY (ProgrammeID) REFERENCES Programmes(ProgrammeID)
+    ModDuration INT
 );
 
 -- Lecturers Table
 CREATE TABLE Lecturers (
-    LecturerID INT PRIMARY KEY,
+    LecturerID INT,
     LectName VARCHAR(255) NOT NULL,
     DepartmentID INT,
     LectEmail VARCHAR(255),
-    LectPhone VARCHAR(20),
-    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+    LectPhone VARCHAR(20)
 );
 
 -- Rooms Table
 CREATE TABLE Rooms (
-    RoomID INT PRIMARY KEY,
+    RoomID INT,
     RoomName VARCHAR(255) NOT NULL,
     RoomType VARCHAR(50),
     RoomCapacity INT
@@ -46,40 +43,31 @@ CREATE TABLE Rooms (
 
 -- Sessions Table
 CREATE TABLE Sessions (
-    SessionID INT PRIMARY KEY,
+    SessionID INT,
     ModuleID INT,
     RoomID INT,
     StartTime TIME,
     EndTime TIME,
-    SessionDate DATE,
-    FOREIGN KEY (ModuleID) REFERENCES Modules(ModuleID),
-    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID)
+    SessionDate DATE
 );
 
 -- ProgrammeModules Linking Table
 CREATE TABLE RoomModules (
     RoomID INT,
-    ModuleID INT,
-    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID),
-    FOREIGN KEY (ModuleID) REFERENCES Modules(ModuleID),
-    PRIMARY KEY (RoomID, ModuleID)
+    ModuleID INT
 );
 
 -- LecturerModules Linking Table
 CREATE TABLE LecturerModules (
     LecturerID INT,
-    ModuleID INT,
-    FOREIGN KEY (LecturerID) REFERENCES Lecturers(LecturerID),
-    FOREIGN KEY (ModuleID) REFERENCES Modules(ModuleID),
-    PRIMARY KEY (LecturerID, ModuleID)
+    ModuleID INT
 );
 
 -- Students Table
 CREATE TABLE Students (
-    StudentID INT PRIMARY KEY,
+    StudentID INT,
     StudentName VARCHAR(255) NOT NULL,
     StudentEmail VARCHAR(255),
     ProgrammeID INT,
-    StudentSemester INT,
-    FOREIGN KEY (ProgrammeID) REFERENCES Programmes(ProgrammeID)
+    StudentSemester INT
 );
