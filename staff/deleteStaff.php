@@ -18,7 +18,7 @@ if (isset($_POST['LecturerID'])) {
     }
 
     // Redirect back to the students page
-    header("Location: programModules.php");
+    header("Location: staff.php");
     exit;
 } else {
     // If StudentID isn't set, redirect or show an error

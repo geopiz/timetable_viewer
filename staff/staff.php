@@ -222,7 +222,7 @@ session_start();
             margin-bottom: 500px;
         }
     </style>
-    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -246,19 +246,18 @@ session_start();
                                 <tr>
                                     <th><input type="text" id="name" name="fullName" class="form-control"
                                                placeholder="Full Name" required></th>
-                                    <th class="align-middle text-center"><?php echo date("Y-m-d"); ?></th>
                                     <th>
-                                        <select id="department" name="Department" class="form-control">
+                                        <select id="programme" name="Programme" class="form-control">
                                             <?php
                                             include "config.php";
-                                            // Query to fetch department names from the database
-                                            $departmentQuery = "SELECT DepName FROM departments";
-                                            $result = mysqli_query($connect, $departmentQuery);
+                                            // Query to fetch programme names from the database
+                                            $programmeQuery = "SELECT ProgName FROM programmes";
+                                            $result = mysqli_query($connect, $programmeQuery);
 
                                             // Loop through each row and create an option for the dropdown
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                $departmentName = $row['DepName'];
-                                                echo "<option value='$departmentName'>$departmentName</option>";
+                                                $programmeName = $row['ProgName'];
+                                                echo "<option value='$programmeName'>$programmeName</option>";
                                             }
                                             ?>
 
@@ -278,46 +277,62 @@ session_start();
 
 
 
-
                         <?php
                         if (isset($_POST['addNewUser'])) {
                             // Handle form submission to add new user
                             $fullName = $_POST["fullName"];
-                            $date = date("Y-m-d");
-                            $Department = $_POST["Department"];
+                            $Programme = $_POST["Programme"];
                             $Email = $_POST["E-mail"];
                             $phone = $_POST["phone"];
                             include "config.php";
 
-                            $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
-                            $db_resultDptID = mysqli_query($connect, $queryDptID);
-                            $db_dpID = mysqli_fetch_assoc($db_resultDptID);
-                            $departmentID = $db_dpID['DepartmentID'];
+                            // Get ProgrammeID
+                            $queryDptID = "SELECT ProgrammeID FROM programmes WHERE ProgName = ?";
+                            $stmtDptID = $connect->prepare($queryDptID);
+                            $stmtDptID->bind_param("s", $Programme);
+                            $stmtDptID->execute();
+                            $resultDptID = $stmtDptID->get_result();
+                            $db_dpID = $resultDptID->fetch_assoc();
+                            $programmeID = $db_dpID['ProgrammeID'];
+                            $stmtDptID->close();
 
+                            // Check for email uniqueness
+                            $emailCheckQuery = "SELECT StudentEmail FROM students WHERE StudentEmail = ? UNION SELECT LectEmail FROM lecturers WHERE LectEmail = ?";
+                            $stmt = $connect->prepare($emailCheckQuery);
+                            $stmt->bind_param("ss", $Email, $Email);
+                            $stmt->execute();
+                            $stmt->store_result();
 
-                            // Insert new user into the database
-                            $newUser = "INSERT INTO lecturers(LectName, CreatedDate, DepartmentID, LectEmail, Lectphone)
-                VALUES('$fullName', '$date','$departmentID', '$Email', '$phone')";
-
-                            $created = mysqli_query($connect, $newUser);
-                            if ($created) {
-                                // Display a JavaScript popup message
-                                echo "<script>alert('User added successfully!');</script>";
-
-                                // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'staff.php';</script>";
-                                exit();
+                            if ($stmt->num_rows == 0) {
+                                // Email is unique, proceed to insert
+                                $insertQuery = "INSERT INTO lecturers (LectName, ProgrammeID, LectEmail, LectPhone) VALUES (?, ?, ?, ?)";
+                                $insertStmt = $connect->prepare($insertQuery);
+                                $insertStmt->bind_param("siss", $fullName, $programmeID, $Email, $phone);
+                                $success = $insertStmt->execute();
+                                
+                                if ($success) {
+                                    echo "<script>alert('User added successfully!');</script>";
+                                    echo "<script>window.location.href = 'staff.php';</script>";
+                                } else {
+                                    die("Error inserting new user: " . $connect->error);
+                                }
+                                $insertStmt->close();
                             } else {
-                                die("Can not connect to server ⛔");
+                                // Email is not unique, alert the user
+                                echo "<script>alert('This email is already in use. Please use another email.');</script>";
                             }
+                            $stmt->close();
                         }
                         ?>
 
 
+
+
+
+
                         <tr>
                             <th><span>Staff Name</span></th>
-                            <th><span>Date Join</span></th>
-                            <th><span>Department</span></th>
+                            <th><span>Programme</span></th>
                             <th class="text-center"><span>E-mail</span></th>
                             <th><span>Phone</span></th>
                             <th><span>Delete User</span></th>
@@ -331,7 +346,7 @@ session_start();
                         <?php  /* Staff Table   */
                         include "config.php";
 
-                        $query = "SELECT * FROM lecturers JOIN departments ON lecturers.DepartmentID = departments.DepartmentID";
+                        $query = "SELECT * FROM lecturers JOIN programmes ON lecturers.ProgrammeID = programmes.ProgrammeID";
                         $db_staffInfo = mysqli_query($connect, $query);
                         $db_staff = mysqli_fetch_assoc($db_staffInfo);
 
@@ -341,8 +356,7 @@ session_start();
 
                         foreach ($db_staffInfo as $db_staff) {
                             $lectName = $db_staff['LectName'];
-                            $lectDate = $db_staff['CreatedDate'];
-                            $lectDepartment = $db_staff['DepName'];
+                            $lectProgramme = $db_staff['ProgName'];
                             $lectEmail = $db_staff['LectEmail'];
                             $lectPhone = $db_staff['LectPhone'];
                             $StudentImage = "https://icons.getbootstrap.com/icons/person/#";
@@ -356,12 +370,8 @@ session_start();
 
                             echo "</td>";
 
-                            echo "<td>";
-                            echo "$lectDate";
-                            echo "</td>";
-
                             echo "<td class='text-center'>";
-                            echo "<span class='label label-default'>$lectDepartment</span>";
+                            echo "<span class='label label-default'>$lectProgramme</span>";
                             echo "</td>";
 
                             echo "<td>";

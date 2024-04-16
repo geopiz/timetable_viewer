@@ -2,6 +2,6 @@
 $serverName = 'localhost';
 $userName = 'root';
 $password = '';
-$dbName = 'examblog';
+$dbName = 'timetable';
 
 $connect = mysqli_connect($serverName, $userName, $password, $dbName);

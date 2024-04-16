@@ -1,5 +1,7 @@
 <?php
 session_start();
+include "config.php";
+$selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
 ?>
 <!doctype html>
 <html lang="en">
@@ -9,7 +11,6 @@ session_start();
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
     <style>
         /* USER LIST TABLE */
         .user-list tbody td > img {
@@ -221,9 +222,8 @@ session_start();
             margin-top: 150px;
             margin-bottom: 500px;
         }
-
     </style>
-    <link href="\timetable_viewer\css\style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
@@ -233,186 +233,89 @@ session_start();
 <!-- Core theme CSS (includes Bootstrap)-->
 <link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
 <?php include '../../timetable_viewer/mainPages/Header.php'; ?>
-<div class="container custom-margin-top">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="main-box clearfix">
-                <div class="table-responsive">
-                    <table class="table user-list">
-                        <thead>
+<div class="container custom-margin-top">  
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="programSelect">Select Program:</label>
+        <select class="form-control" id="programSelect" name="ProgName" onchange="this.form.submit()">
+            <option value="All" <?php echo ($selectedProgram == 'All') ? 'selected' : ''; ?>>All</option>
+            <?php
+            $sql = "SELECT ProgName FROM programmes";
+            $result = mysqli_query($connect, $sql);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $isSelected = ($row['ProgName'] == $selectedProgram) ? 'selected' : '';
+                echo "<option value='" . htmlspecialchars($row['ProgName']) . "' $isSelected>" . htmlspecialchars($row['ProgName']) . "</option>";
+            }
+            ?>
+        </select>
+    </div>
+</form>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix">
+            <div class="table-responsive">
+                <?php
+                if ($selectedProgram == 'All') {
+                    // Headers for the program information
+                    echo "<table class='table user-list'>";
+                    echo "<thead>";
+                    echo "<tr>";
+                    echo "<th>Programme Name</th>";
+                    echo "<th>Department</th>";
+                    echo "<th>Programme Description</th>";
+                    echo "<th>Programme Duration</th>";
+                    echo "</tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
 
-                        <!-- Display the button only if the user is an admin -->
+                    $sql = "SELECT programmes.ProgName, departments.DepName, programmes.ProgDescription, programmes.ProgDuration FROM programmes JOIN departments ON programmes.DepartmentID = departments.DepartmentID";
+                    $result = mysqli_query($connect, $sql);
 
-                            <form method="POST">
-                                <tr>
-                                    <th><input type="text" id="name" name="fullName" class="form-control"
-                                               placeholder="Full Name" required></th>
-                                    <th class="align-middle text-center"><?php echo date("Y-m-d"); ?></th>
-                                    <th>
-                                        <select id="department" name="Department" class="form-control">
-                                            <?php
-                                            include "config.php";
-                                            // Query to fetch department names from the database
-                                            $departmentQuery = "SELECT DepName FROM departments";
-                                            $result = mysqli_query($connect, $departmentQuery);
+                    while ($program = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$program['ProgName']}</td>";
+                        echo "<td>{$program['DepName']}</td>";
+                        echo "<td>{$program['ProgDescription']}</td>";
+                        echo "<td>{$program['ProgDuration']}</td>";
+                        echo "</tr>";
+                    }
+                    echo "</tbody>";
+                    echo "</table>";
+                } else {
+                    // Headers for the modules
+                    echo "<table class='table user-list'>";
+                    echo "<thead>";
+                    echo "<tr>";
+                    echo "<th>Module Name</th>";
+                    echo "<th>Semester</th>";
+                    echo "<th>Module Description</th>";
+                    echo "<th>Module Duration</th>";
+                    echo "</tr>";
+                    echo "</thead>";
+                    echo "<tbody>";
 
-                                            // Loop through each row and create an option for the dropdown
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                $departmentName = $row['DepName'];
-                                                echo "<option value='$departmentName'>$departmentName</option>";
-                                            }
-                                            ?>
+                    $stmt = $connect->prepare("SELECT ModName, ModSemester, ModDescription, ModDuration FROM modules JOIN programmes ON modules.ProgrammeID = programmes.ProgrammeID WHERE ProgName = ?");
+                    $stmt->bind_param("s", $selectedProgram);
+                    $stmt->execute();
+                    $modulesResult = $stmt->get_result();
 
-                                        </select>
-                                    </th>
-                                    <th><input type="email" id="email" name="E-mail" class="form-control"
-                                               placeholder="E-mail"></th>
-                                    <th><input type="text" id="phone" name="phone" class="form-control"
-                                               placeholder="Phone"></th>
-                                    <th>
-                                        <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
-                                            User
-                                        </button>
-                                    </th>
-                                </tr>
-                            </form>
-
-
-
-
-                        <?php
-                        if (isset($_POST['addNewUser'])) {
-                            // Handle form submission to add new user
-                            $fullName = $_POST["fullName"];
-                            $date = date("Y-m-d");
-                            $Department = $_POST["Department"];
-                            $Email = $_POST["E-mail"];
-                            $phone = $_POST["phone"];
-                            include "config.php";
-
-                            $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
-                            $db_resultDptID = mysqli_query($connect, $queryDptID);
-                            $db_dpID = mysqli_fetch_assoc($db_resultDptID);
-                            $departmentID = $db_dpID['DepartmentID'];
-
-
-                            // Insert new user into the database
-                            $newUser = "INSERT INTO lecturers(LectName, CreatedDate, DepartmentID, LectEmail, Lectphone)
-                VALUES('$fullName', '$date','$departmentID', '$Email', '$phone')";
-
-                            $created = mysqli_query($connect, $newUser);
-                            if ($created) {
-                                // Display a JavaScript popup message
-                                echo "<script>alert('User added successfully!');</script>";
-
-                                // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'programModules.php';</script>";
-                                exit();
-                            } else {
-                                die("Can not connect to server ⛔");
-                            }
-                        }
-                        ?>
-
-
-                        <tr>
-                            <th><span>Staff Name</span></th>
-                            <th><span>Date Join</span></th>
-                            <th><span>Department</span></th>
-                            <th class="text-center"><span>E-mail</span></th>
-                            <th><span>Phone</span></th>
-                            <th><span>Delete User</span></th>
-                        </tr>
-                        </thead>
-
-                        <form action="programModules.php" method="POST">
-
-                        </form>
-
-                        <?php  /* Staff Table   */
-                        include "config.php";
-
-                        $query = "SELECT * FROM lecturers JOIN departments ON lecturers.DepartmentID = departments.DepartmentID";
-                        $db_staffInfo = mysqli_query($connect, $query);
-                        $db_staff = mysqli_fetch_assoc($db_staffInfo);
-
-
-                        echo "<tbody>";
-
-
-                        foreach ($db_staffInfo as $db_staff) {
-                            $lectName = $db_staff['LectName'];
-                            $lectDate = $db_staff['CreatedDate'];
-                            $lectDepartment = $db_staff['DepName'];
-                            $lectEmail = $db_staff['LectEmail'];
-                            $lectPhone = $db_staff['LectPhone'];
-                            $StudentImage = "https://icons.getbootstrap.com/icons/person/#";
-                            //Staff img
-
-
-                            echo "<tr>";
-
-                            echo "<td>";
-                            echo '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="black" class="bi bi-person" viewBox="0 0 16 16">
-                              <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-                            </svg>';
-                            echo "<a href='#' class='user-link'>$lectName</a>";
-
-                            echo "</td>";
-
-                            echo "<td>";
-                            echo "$lectDate";
-                            echo "</td>";
-
-                            echo "<td class='text-center'>";
-                            echo "<span class='label label-default'>$lectDepartment</span>";
-                            echo "</td>";
-
-                            echo "<td>";
-                            echo "<a href='#'>$lectEmail</a>";
-                            echo "</td>";
-                            echo "<td>";
-                            echo "<a href='#'>$lectPhone</a>";
-                            echo "</td>";
-
-
-                                echo '<td style="width: 20%;">';
-                                echo '<form action="deletestaff.php" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="LecturerID" value="' . $db_staff['LecturerID'] . '"/>';
-                                echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
-                                echo '<a href="#" class="table-link danger">';
-                                echo '<span class="fa-stack">';
-                                echo '<i class="fa fa-square fa-stack-2x"></i>';
-                                echo '<i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>';
-                                echo '</span>';
-                                echo '</a>';
-                                echo '</button>';
-                                echo '</form>';
-
-                            echo '</td>';
-                            echo "</tr>";
-                        }
-                        echo "</tbody>";
-                        ?>
-                        <script>
-                            function confirmDelete() {
-                                if (confirm("Are you sure you want to delete this user?")) {
-                                    // User confirmed, allow form submission
-                                    return true;
-                                } else {
-                                    // User canceled, prevent form submission
-                                    return false;
-                                }
-                            }
-                        </script>
-                    </table>
-                </div>
-
+                    while ($module = $modulesResult->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>{$module['ModName']}</td>";
+                        echo "<td>{$module['ModSemester']}</td>";
+                        echo "<td>{$module['ModDescription']}</td>";
+                        echo "<td>{$module['ModDuration']}</td>";
+                        echo "</tr>";
+                    }
+                    echo "</tbody>";
+                    echo "</table>";
+                    $stmt->close();
+                }
+                ?>
             </div>
         </div>
     </div>
 </div>
 <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
-?>
 </body>
 </html>
