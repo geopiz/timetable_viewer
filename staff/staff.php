@@ -277,7 +277,6 @@ session_start();
 
 
 
-
                         <?php
                         if (isset($_POST['addNewUser'])) {
                             // Handle form submission to add new user
@@ -287,29 +286,48 @@ session_start();
                             $phone = $_POST["phone"];
                             include "config.php";
 
-                            $queryDptID = "Select ProgrammeID from programmes WHERE depName = '$Programme' ";
-                            $db_resultDptID = mysqli_query($connect, $queryDptID);
-                            $db_dpID = mysqli_fetch_assoc($db_resultDptID);
+                            // Get ProgrammeID
+                            $queryDptID = "SELECT ProgrammeID FROM programmes WHERE ProgName = ?";
+                            $stmtDptID = $connect->prepare($queryDptID);
+                            $stmtDptID->bind_param("s", $Programme);
+                            $stmtDptID->execute();
+                            $resultDptID = $stmtDptID->get_result();
+                            $db_dpID = $resultDptID->fetch_assoc();
                             $programmeID = $db_dpID['ProgrammeID'];
+                            $stmtDptID->close();
 
+                            // Check for email uniqueness
+                            $emailCheckQuery = "SELECT StudentEmail FROM students WHERE StudentEmail = ? UNION SELECT LectEmail FROM lecturers WHERE LectEmail = ?";
+                            $stmt = $connect->prepare($emailCheckQuery);
+                            $stmt->bind_param("ss", $Email, $Email);
+                            $stmt->execute();
+                            $stmt->store_result();
 
-                            // Insert new user into the database
-                            $newUser = "INSERT INTO lecturers(LectName, ProgrammeID, LectEmail, Lectphone)
-                VALUES('$fullName','$programmeID', '$Email', '$phone')";
-
-                            $created = mysqli_query($connect, $newUser);
-                            if ($created) {
-                                // Display a JavaScript popup message
-                                echo "<script>alert('User added successfully!');</script>";
-
-                                // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'staff.php';</script>";
-                                exit();
+                            if ($stmt->num_rows == 0) {
+                                // Email is unique, proceed to insert
+                                $insertQuery = "INSERT INTO lecturers (LectName, ProgrammeID, LectEmail, LectPhone) VALUES (?, ?, ?, ?)";
+                                $insertStmt = $connect->prepare($insertQuery);
+                                $insertStmt->bind_param("siss", $fullName, $programmeID, $Email, $phone);
+                                $success = $insertStmt->execute();
+                                
+                                if ($success) {
+                                    echo "<script>alert('User added successfully!');</script>";
+                                    echo "<script>window.location.href = 'staff.php';</script>";
+                                } else {
+                                    die("Error inserting new user: " . $connect->error);
+                                }
+                                $insertStmt->close();
                             } else {
-                                die("Can not connect to server ⛔");
+                                // Email is not unique, alert the user
+                                echo "<script>alert('This email is already in use. Please use another email.');</script>";
                             }
+                            $stmt->close();
                         }
                         ?>
+
+
+
+
 
 
                         <tr>

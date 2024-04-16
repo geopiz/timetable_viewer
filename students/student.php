@@ -307,43 +307,57 @@ session_start();
 
 
                         <?php
-                        if (isset($_POST['addNewUser'])) {
-                            // Handle form submission to add new user
-                            $fullName = $_POST["fullName"];
-                            $Department = $_POST["Department"];
-                            $programme = $_POST["programmeName"];
-                            $Email = $_POST["E-mail"];
-                            $semester = $_POST["semester"];
-                            include "config.php";
+                            if (isset($_POST['addNewUser'])) {
+                                // Handle form submission to add new user
+                                $fullName = $_POST["fullName"];
+                                $Department = $_POST["Department"];
+                                $programme = $_POST["programmeName"];
+                                $Email = $_POST["E-mail"];
+                                $semester = $_POST["semester"];
+                                include "config.php";
 
-                            $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
-                            $db_resultDptID = mysqli_query($connect, $queryDptID);
-                            $db_dpID = mysqli_fetch_assoc($db_resultDptID);
-                            $departmentID = $db_dpID['DepartmentID'];
+                                // Fetch department ID
+                                $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
+                                $db_resultDptID = mysqli_query($connect, $queryDptID);
+                                $db_dpID = mysqli_fetch_assoc($db_resultDptID);
+                                $departmentID = $db_dpID['DepartmentID'];
 
-                            $queryProgID = "Select ProgrammeID from programmes WHERE ProgName = '$programme' ";
-                            $db_resultProgtID = mysqli_query($connect, $queryProgID);
-                            $db_dpID = mysqli_fetch_assoc($db_resultProgtID);
-                            $programmeID = $db_dpID['ProgrammeID'];
+                                // Fetch programme ID
+                                $queryProgID = "Select ProgrammeID from programmes WHERE ProgName = '$programme' ";
+                                $db_resultProgID = mysqli_query($connect, $queryProgID);
+                                $db_progID = mysqli_fetch_assoc($db_resultProgID);
+                                $programmeID = $db_progID['ProgrammeID'];
 
+                                // Check for email uniqueness
+                                $emailCheckQuery = "SELECT StudentEmail FROM students WHERE StudentEmail = ? UNION SELECT LectEmail FROM lecturers WHERE LectEmail = ?";
+                                $stmt = $connect->prepare($emailCheckQuery);
+                                $stmt->bind_param("ss", $Email, $Email);
+                                $stmt->execute();
+                                $stmt->store_result();
 
-                            // Insert new user into the database
-                            $newUser = "INSERT INTO students(StudentName, StudentEmail, ProgrammeID, StudentSemester)
-                VALUES('$fullName', '$Email','$programmeID', '$semester')";
+                                if ($stmt->num_rows == 0) {
+                                    // Email is unique, proceed with inserting the new student
+                                    $newUserQuery = "INSERT INTO students (StudentName, StudentEmail, ProgrammeID, StudentSemester) VALUES (?, ?, ?, ?)";
+                                    $newUserStmt = $connect->prepare($newUserQuery);
+                                    $newUserStmt->bind_param("ssii", $fullName, $Email, $programmeID, $semester);
+                                    $created = $newUserStmt->execute();
 
-                            $created = mysqli_query($connect, $newUser);
-                            if ($created) {
-                                // Display a JavaScript popup message
-                                echo "<script>alert('User added successfully!');</script>";
+                                    if ($created) {
+                                        echo "<script>alert('Student added successfully!');</script>";
+                                        echo "<script>window.location.href = 'student.php';</script>";
+                                    } else {
+                                        echo "<script>alert('Error: could not execute the query.');</script>";
+                                    }
 
-                                // Redirect or refresh the page to display updated user list
-                                echo "<script>window.location.href = 'student.php';</script>";
-                                exit();
-                            } else {
-                                die("Can not connect to server ⛔");
+                                    $newUserStmt->close();
+                                } else {
+                                    echo "<script>alert('This email is already in use. Please use another email.');</script>";
+                                }
+
+                                $stmt->close();
                             }
-                        }
-                        ?>
+                            ?>
+
 
                         <tr>
                             <th><span>Student Name</span></th>
