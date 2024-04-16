@@ -1,4 +1,3 @@
-// login_check.php
 <?php
 function checkUserLoggedIn() {
     session_start();

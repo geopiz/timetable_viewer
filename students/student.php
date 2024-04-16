@@ -487,12 +487,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     </div>
 </div>
 
-
-
-
 <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
-
-
 </body>
 </html>
 <?php endif; ?>
