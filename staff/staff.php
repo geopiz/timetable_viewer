@@ -234,7 +234,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
+
 <?php include '../../timetable_viewer/mainPages/Header.php'; ?>
 <div class="container custom-margin-top">
     <div class="row">
