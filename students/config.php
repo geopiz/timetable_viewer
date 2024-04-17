@@ -5,3 +5,4 @@ $password = '';
 $dbName = 'timetable';
 
 $connect = mysqli_connect($serverName, $userName, $password, $dbName);
+
