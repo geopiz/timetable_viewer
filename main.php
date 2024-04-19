@@ -93,69 +93,59 @@ $sessionsData = [];
 </head>
 <body>
 
-
 <?php include "mainPages/Header.php"; ?>
 
+<!-- Inside the body, after the header include -->
 <div class="container-timetable">
-    <div class="timetable">
-        <div class="week-names">
-            <div>Monday</div>
-            <div>Tuesday</div>
-            <div>Wednesday</div>
-            <div>Thursday</div>
-            <div>Friday</div>
-            <div class="weekend">Saturday</div>
-            <div class="weekend">Sunday</div>
-        </div>
-        <div class="time-interval">
-            <div>09:00 - 10:00</div>
-            <div>10:00 - 11:00</div>
-            <div>11:00 - 12:00</div>
-            <div>12:00 - 13:00</div>
-            <div>13:00 - 14:00</div>
-            <div>14:00 - 15:00</div>
-            <div>15:00 - 16:00</div>
-            <div>16:00 - 17:00</div>
-            
-        </div>
-        <div class="content">
-            <!-- Dynamically populate the timetable with PHP -->
-            <?php foreach ($sessionsData as $session):
-            // Calculate the day of the week for the session
-            $sessionDate = new DateTime($session['SessionDate']);
-            $dayOfWeek = (int)$sessionDate->format('N'); // 1 for Monday, 7 for Sunday
-
-            // Time formatting
-            $startTime = new DateTime($session['StartTime']);
-            $endTime = new DateTime($session['EndTime']);
-
-            // Calculate start time position (assuming the first time slot starts at 9:00)
-            $startHour = (int)$startTime->format('G'); // 24-hour format without leading zeros
-            $startTimePosition = $startHour - 9 + 1; // +1 because grid-row is 1-indexed
-
-            // Calculate duration in hours
-            $duration = $endTime->diff($startTime)->h;
-
-            // If the duration is 0 and the end minute is greater, it means the session is less than 1 hour but should still take 1 hour slot
-            if ($duration === 0 && $endTime->format('i') > $startTime->format('i')) {
-                $duration = 1;
-            }
-
-            // Determine the gradient class based on the module or any other criteria
-            $gradientClass = "accent-orange-gradient"; // This is an example, you can customize it
-            ?>
-            <div class="<?php echo $gradientClass; ?>" style="grid-column: <?php echo $dayOfWeek; ?>; grid-row: <?php echo $startTimePosition; ?> / span <?php echo $duration; ?>;">
-            <div><strong><?= $session['ModuleName']; ?></strong></div>
-            <div><?= $session['RoomName']; ?></div>
-    </div>
-            </div>
-            <?php endforeach; ?>
-
-
-            <!-- The rest of the empty divs go here if needed for layout -->
-        </div>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Time / Day</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th class="weekend">Saturday</th>
+                <th class="weekend">Sunday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php for ($hour = 9; $hour <= 16; $hour++): // Loop through each hour from 9 to 16 ?>
+            <tr>
+                <td><?php echo sprintf('%02d:00 - %02d:00', $hour, $hour + 1); ?></td>
+                <?php for ($day = 1; $day <= 7; $day++): // Loop through each day ?>
+                    <?php
+                    $slotFilled = false;
+                    foreach ($sessionsData as $session):
+                        $sessionDate = new DateTime($session['SessionDate']);
+                        $dayOfWeek = (int)$sessionDate->format('N');
+                        $startTime = new DateTime($session['StartTime']);
+                        $endTime = new DateTime($session['EndTime']); // Make sure to define $endTime here
+                        $startHour = (int)$startTime->format('G');
+                        $durationHours = $endTime->diff($startTime)->h;
+                        $durationMinutes = $endTime->diff($startTime)->i;
+                        $duration = $durationHours + ($durationMinutes > 0 ? 1 : 0); // Calculate duration including minutes
+                        
+                        if ($dayOfWeek == $day && $startHour == $hour):
+                            $slotFilled = true; ?>
+                            <td rowspan="<?= $duration ?>">
+                                <div class="<?= $gradientClass; ?>">
+                                    <strong><?= $session['ModuleName']; ?></strong><br>
+                                    <?= $session['RoomName']; ?>
+                                </div>
+                            </td>
+                        <?php endif;
+                    endforeach;
+                    if (!$slotFilled) echo '<td></td>'; // Fill in empty slot
+                    ?>
+                <?php endfor; ?>
+            </tr>
+            <?php endfor; ?>
+        </tbody>
+    </table>
 </div>
+
 
 <?php include "mainPages/footer.php"; ?>
 
