@@ -255,7 +255,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                            placeholder="Full Name" required></th>
                                 <th>
                                     <?php
-                                    include "config.php";
+                                    include "../config.php";
                                     ?>
                                     <select id="department" name="Department" class="form-control"
                                             onchange="updateProgramme();">
@@ -318,7 +318,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 $programme = $_POST["programmeName"];
                                 $Email = $_POST["E-mail"];
                                 $semester = $_POST["semester"];
-                                include "config.php";
+                                include "../config.php";
 
                                 // Fetch department ID
                                 $queryDptID = "Select DepartmentID from departments WHERE depName = '$Department' ";
@@ -378,7 +378,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                         </form>
 
                         <?php /* Staff Table   */
-                        include "config.php";
+                        include "../config.php";
 
                         // Pagination Variables
                         $results_per_page = 40;

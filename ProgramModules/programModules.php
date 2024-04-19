@@ -6,7 +6,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 ?>
 <?php if ($isAdmin): ?>
 <?php    
-include "config.php";
+include "../config.php";
 $selectedProgram = isset($_POST['ProgName']) ? $_POST['ProgName'] : 'All';
 ?>
 <!doctype html>

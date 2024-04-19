@@ -253,7 +253,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <select id="programme" name="Programme" class="form-control" onchange="updateModulesAndLecturers();">
                                     <option value="">Select a Programme</option>
                                             <?php
-                                            include "config.php";
+                                            include "../config.php";
                                             // Query to fetch programme names from the database
                                             $programmeQuery = "SELECT ProgName, ProgrammeID FROM programmes";
                                             $result = mysqli_query($connect, $programmeQuery);
@@ -294,7 +294,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <select id="starttime" name="Startime" class="form-control" required onchange="calculateEndTime();">
                                     <option value="">Select Start Time</option>
                                             <?php
-                                            include "config.php";
+                                            include "../config.php";
                                             // Query to fetch programme names from the database
                                             $starttimeQuery = "SELECT DISTINCT hourtime FROM hourtimes";
                                             $result = mysqli_query($connect, $starttimeQuery);
@@ -334,7 +334,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     $RoomID = $_POST["Room"];
                                     $Startime = $_POST["Startime"];
                                     $Endtime = $_POST["Endtime"];
-                                    include "config.php";
+                                    include "../config.php";
                                     
                                     // Prepare your insert query
                                     $insertQuery = "INSERT INTO sessions (ProgrammeID, ModuleID, LecturerID,RoomID, StartTime, EndTime, SessionDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -370,7 +370,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                         </form>
 
                         <?php  /* Staff Table   */
-                        include "config.php";
+                        include "../config.php";
 
                         $query = "SELECT sessions.*, modules.ModName, rooms.RoomName, lecturers.LectName, programmes.ProgName
                         FROM sessions

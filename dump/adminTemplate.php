@@ -12706,7 +12706,7 @@ session_start();
                                     <th>
                                         <select id="department" name="Department" class="form-control">
                                             <?php
-                                            include "config.php";
+                                            include "../config.php";
                                             // Query to fetch department names from the database
                                             $departmentQuery = "SELECT Name FROM category";
                                             $result = mysqli_query($connect, $departmentQuery);
@@ -12738,7 +12738,7 @@ session_start();
                             $Department = $_POST["Department"];
                             $Email = $_POST["E-mail"];
                             $Member = "member";
-                            include "config.php";
+                            include "../config.php";
 
                             // Insert new user into the database
                             $newUser = "INSERT INTO students(StudentName, StudentDepartment, StudentEmail, RoleID, StudentDate)
@@ -12772,7 +12772,7 @@ session_start();
                         </form>
 
                         <?php
-                        include "config.php";
+                        include "../config.php";
 
                         $query = "SELECT * FROM students ";
                         $studentInfo = mysqli_query($connect, $query);

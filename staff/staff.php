@@ -253,7 +253,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <th>
                                         <select id="programme" name="Programme" class="form-control">
                                             <?php
-                                            include "config.php";
+                                            include "../config.php";
                                             // Query to fetch programme names from the database
                                             $programmeQuery = "SELECT ProgName FROM programmes";
                                             $result = mysqli_query($connect, $programmeQuery);
@@ -288,7 +288,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             $Programme = $_POST["Programme"];
                             $Email = $_POST["E-mail"];
                             $phone = $_POST["phone"];
-                            include "config.php";
+                            include "../config.php";
 
                             // Get ProgrammeID
                             $queryDptID = "SELECT ProgrammeID FROM programmes WHERE ProgName = ?";
@@ -348,7 +348,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                         </form>
 
                         <?php  /* Staff Table   */
-                        include "config.php";
+                        include "../config.php";
 
                         $query = "SELECT * FROM lecturers JOIN programmes ON lecturers.ProgrammeID = programmes.ProgrammeID";
                         $db_staffInfo = mysqli_query($connect, $query);

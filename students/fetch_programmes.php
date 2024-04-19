@@ -1,6 +1,6 @@
 <?php
 // Include your database connection settings
-include "config.php";
+include "../config.php";
 
 // Check if the department name was sent to this script via POST
 if (isset($_POST['department'])) {

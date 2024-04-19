@@ -1,5 +1,5 @@
 <?php
-include "config.php";
+include "../config.php";
 
 if (isset($_POST['LecturerID'])) {
     $LecturerID = mysqli_real_escape_string($connect, $_POST['LecturerID']);

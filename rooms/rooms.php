@@ -255,7 +255,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     <th>
                                         <select id="department" name="roomType" class="form-control">
                                             <?php
-                                            include "config.php";
+                                            include "../config.php";
                                             // Query to fetch department names from the database
                                             $roomTypeQuery = "SELECT distinct RoomType FROM rooms";
                                             $result = mysqli_query($connect, $roomTypeQuery);
@@ -283,7 +283,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             $roomName = $_POST["roomName"];
                             $roomType = $_POST["roomType"];
                             $roomCapacity = $_POST["capacity"];
-                            include "config.php";
+                            include "../config.php";
 
                             // Insert new user into the database
                             $newUser = "INSERT INTO rooms(RoomName, RoomType, RoomCapacity)
@@ -318,7 +318,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                         </form>
 
                         <?php  /* Staff Table   */
-                        include "config.php";
+                        include "../config.php";
 
                         $query = "SELECT * FROM rooms";
                         $db_roomInfo = mysqli_query($connect, $query);
