@@ -339,7 +339,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                     // Prepare your insert query
                                     $insertQuery = "INSERT INTO sessions (ProgrammeID, ModuleID, LecturerID,RoomID, StartTime, EndTime, SessionDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
                                     $insertStmt = $connect->prepare($insertQuery);
-                                    $insertStmt->bind_param("iiiisss", $ProgrammeID, $ModuleID,LecturerID, $RoomID, $Startime, $Endtime, $DATE);
+                                    $insertStmt->bind_param("iiiisss", $ProgrammeID, $ModuleID, $LecturerID, $RoomID, $Startime, $Endtime, $DATE);
                                     if ($insertStmt->execute()) {
                                         echo "<script>alert('Session added successfully!'); window.location.href = 'sessions.php';</script>";
                                     } else {
