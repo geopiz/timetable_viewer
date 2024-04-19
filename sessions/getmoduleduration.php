@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-include 'config.php';
+include "../config.php";
 
 // Make sure the moduleId parameter is passed to the script
 if (isset($_POST['moduleId']) && !empty($_POST['moduleId'])) {
