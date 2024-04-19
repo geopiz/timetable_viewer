@@ -172,21 +172,6 @@ INSERT INTO Modules (ModuleID, ProgrammeID, ModSemester, ModName, ModDescription
 (47, 4, 6, 'Renewable Energy Systems', 'Technologies and systems for renewable energy.', 3),
 (48, 4, 6, 'Capstone Project in Electrical Engineering', 'Final project integrating electrical engineering concepts.', 4);
 
--- Assigning Lecturers to Modules based on their Programme
-INSERT INTO LecturerModules (LecturerID, ModuleID) VALUES
--- Alice Smith and Bob Jones to Programme 1 Modules
-(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6),
-(2, 7), (2, 8), (2, 9), (2, 10), (2, 11), (2, 12),
--- Charlie Brown and Dana White to Programme 2 Modules
-(3, 13), (3, 14), (3, 15), (3, 16), (3, 17), (3, 18),
-(4, 19), (4, 20), (4, 21), (4, 22), (4, 23), (4, 24),
--- Evan Green and Fiona Grey to Programme 3 Modules
-(5, 25), (5, 26), (5, 27), (5, 28), (5, 29), (5, 30),
-(6, 31), (6, 32), (6, 33), (6, 34), (6, 35), (6, 36),
--- George Black and Hannah Blue to Programme 4 Modules
-(7, 37), (7, 38), (7, 39), (7, 40), (7, 41), (7, 42),
-(8, 43), (8, 44), (8, 45), (8, 46), (8, 47), (8, 48);
-
 
 INSERT INTO Students (StudentID, StudentName, StudentEmail, ProgrammeID, StudentSemester) VALUES
 -- Programme 1, Semester 1

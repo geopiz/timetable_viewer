@@ -57,12 +57,6 @@ CREATE TABLE RoomModules (
     ModuleID INT
 );
 
--- LecturerModules Linking Table
-CREATE TABLE LecturerModules (
-    LecturerID INT,
-    ModuleID INT
-);
-
 -- Students Table
 CREATE TABLE Students (
     StudentID INT,

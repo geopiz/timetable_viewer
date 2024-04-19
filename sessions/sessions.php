@@ -234,7 +234,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
+<link href="/css/styles.css" rel="stylesheet"/>
 <?php include '../../timetable_viewer/mainPages/Header.php'; ?>
 <div class="container custom-margin-top">
     <div class="row">
@@ -248,10 +248,10 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
                             <form method="POST">
                                 <tr>
-                                    <th><input type="text" id="name" name="fullName" class="form-control"
-                                               placeholder="Full Name" required></th>
+                                    <th><input type="date" id="date" name="Date" class="form-control" required></th>
                                     <th>
-                                        <select id="programme" name="Programme" class="form-control">
+                                    <select id="programme" name="Programme" class="form-control" onchange="updateModulesAndLecturers();">
+                                    <option value="">Select a Programme</option>
                                             <?php
                                             include "config.php";
                                             // Query to fetch programme names from the database
@@ -267,10 +267,54 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
                                         </select>
                                     </th>
-                                    <th><input type="email" id="email" name="E-mail" class="form-control"
-                                               placeholder="E-mail"></th>
-                                    <th><input type="tel" id="phone" name="phone" class="form-control"
-                                               placeholder="Phone"></th>
+                                    
+                                    <th>
+                                    <select id="module" name="Module" class="form-control" required onchange="getModuleDuration();" >
+                                        <option value="">Select a Module</option>
+                                        <!-- Options will be populated by AJAX -->
+                                    </select>
+                                </th>
+
+                                <th>
+                                <select id="lecturer" name="Lecturer" class="form-control" required>
+                                <option value="">Select a Lecturer</option>
+                                <!-- Options will be populated by AJAX -->
+                                </select>
+                                </th>
+                                <th>
+                                <select id="room" name="Room" class="form-control" required>
+                                <option value="">Select a Room</option>
+                                <!-- Options will be populated by AJAX -->
+                                </select>
+                                </th>
+
+
+                                <th>
+                                    <select id="starttime" name="Startime" class="form-control" required onchange="calculateEndTime();">
+                                    <option value="">Select Start Time</option>
+                                            <?php
+                                            include "config.php";
+                                            // Query to fetch programme names from the database
+                                            $starttimeQuery = "SELECT DISTINCT hourtime FROM hourtimes";
+                                            $result = mysqli_query($connect, $starttimeQuery);
+
+                                            // Loop through each row and create an option for the dropdown
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                $starttime = $row['hourtime'];
+                                                echo "<option value='$starttime'>$starttime</option>";
+                                            }
+                                            ?>
+
+                                        </select>
+                                    </th>
+                                
+                                    <th>
+                                    <select id="endtime" name="Endtime" class="form-control" required>
+                                        <option value="">Select End Time</option> <!-- Default option that prompts user to select an end time -->
+                                    </select>
+                                </th>
+
+
                                     <th>
                                         <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
                                             User
@@ -284,7 +328,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                         <?php
                         if (isset($_POST['addNewUser'])) {
                             // Handle form submission to add new user
-                            $fullName = $_POST["fullName"];
+                            $DATE = $_POST["fullName"];
                             $Programme = $_POST["Programme"];
                             $Email = $_POST["E-mail"];
                             $phone = $_POST["phone"];
@@ -300,23 +344,18 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             $programmeID = $db_dpID['ProgrammeID'];
                             $stmtDptID->close();
 
-                            // Check for email uniqueness
-                            $emailCheckQuery = "SELECT StudentEmail FROM students WHERE StudentEmail = ? UNION SELECT LectEmail FROM lecturers WHERE LectEmail = ?";
-                            $stmt = $connect->prepare($emailCheckQuery);
-                            $stmt->bind_param("ss", $Email, $Email);
-                            $stmt->execute();
-                            $stmt->store_result();
+
 
                             if ($stmt->num_rows == 0) {
                                 // Email is unique, proceed to insert
-                                $insertQuery = "INSERT INTO lecturers (LectName, ProgrammeID, LectEmail, LectPhone) VALUES (?, ?, ?, ?)";
+                                $insertQuery = "INSERT INTO sessions (LectName, ProgrammeID, LectEmail, LectPhone) VALUES (?, ?, ?, ?)";
                                 $insertStmt = $connect->prepare($insertQuery);
                                 $insertStmt->bind_param("siss", $fullName, $programmeID, $Email, $phone);
                                 $success = $insertStmt->execute();
                                 
                                 if ($success) {
                                     echo "<script>alert('User added successfully!');</script>";
-                                    echo "<script>window.location.href = 'staff.php';</script>";
+                                    echo "<script>window.location.href = 'session.php';</script>";
                                 } else {
                                     die("Error inserting new user: " . $connect->error);
                                 }
@@ -335,60 +374,80 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
 
                         <tr>
-                            <th><span>Staff Name</span></th>
+                            <th><span>Date</span></th>
                             <th><span>Programme</span></th>
-                            <th class="text-center"><span>E-mail</span></th>
-                            <th><span>Phone</span></th>
-                            <th><span>Delete User</span></th>
+                            <th class="text-center"><span>Module</span></th>
+                            <th><span>Lecturer</span></th>
+                            <th><span>Room</span></th>
+                            <th><span>Start Time</span></th>
+                            <th><span>End Time</span></th>
+                            <th><span>Delete Session</span></th>
                         </tr>
                         </thead>
 
-                        <form action="staff.php" method="POST">
+                        <form action="session.php" method="POST">
 
                         </form>
 
                         <?php  /* Staff Table   */
                         include "config.php";
 
-                        $query = "SELECT * FROM lecturers JOIN programmes ON lecturers.ProgrammeID = programmes.ProgrammeID";
-                        $db_staffInfo = mysqli_query($connect, $query);
-                        $db_staff = mysqli_fetch_assoc($db_staffInfo);
+                        $query = "SELECT SessionID,ModName,RoomName,LectName,ProgName,StartTime,EndTime,SessionDate 
+                        FROM sessions 
+                        JOIN modules ON sessions.ModuleID = modules.ModuleID
+                        JOIN rooms ON rooms.roomID = sessions.RoomID
+                        JOIN programmes ON modules.ProgrammeID = programmes.ProgrammeID
+                        JOIN lecturers ON programmes.ProgrammeID = lecturers.ProgrammeID;";
+                        $db_sessionInfo = mysqli_query($connect, $query);
+                        $db_session = mysqli_fetch_assoc($db_sessionInfo);
 
 
                         echo "<tbody>";
 
 
-                        foreach ($db_staffInfo as $db_staff) {
-                            $lectName = $db_staff['LectName'];
-                            $lectProgramme = $db_staff['ProgName'];
-                            $lectEmail = $db_staff['LectEmail'];
-                            $lectPhone = $db_staff['LectPhone'];
-                            $StudentImage = "https://icons.getbootstrap.com/icons/person/#";
-                            //Staff img
-
+                        foreach ($db_sessionInfo as $db_session) {
+                            $date = $db_session['SessionDate'];
+                            $programme = $db_session['ProgName'];
+                            $module = $db_session['ModName'];
+                            $lecturer = $db_session['LectName'];
+                            $room = $db_session['RoomName'];
+                            $starttime = $db_session['StartTime'];
+                            $endtime = $db_session['EndTime'];
+                            $date = $db_session['SessionDate'];
+                  
 
                             echo "<tr>";
 
                             echo "<td>";
-                            echo "<a href='#' class='user-link'>$lectName</a>";
+                            echo "<span>$date</span>";
 
                             echo "</td>";
 
                             echo "<td class='text-center'>";
-                            echo "<span class='label label-default'>$lectProgramme</span>";
+                            echo "<span class='label label-default'>$programme</span>";
                             echo "</td>";
 
                             echo "<td>";
-                            echo "<a href='#'>$lectEmail</a>";
+                            echo "<span>$module</span>";
                             echo "</td>";
                             echo "<td>";
-                            echo "<a href='#'>$lectPhone</a>";
+                            echo "<span>$lecturer</span>";
                             echo "</td>";
+                            echo "<td>";
+                            echo "<span>$room</span>";
+                            echo "</td>";
+                            echo "<td>";
+                            echo "<span>$starttime</span>";
+                            echo "</td>";
+                            echo "<td>";
+                            echo "<span>$endtime</span>";
+                            echo "</td>";
+                
 
 
                                 echo '<td style="width: 20%;">';
-                                echo '<form action="deletestaff.php" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="LecturerID" value="' . $db_staff['LecturerID'] . '"/>';
+                                echo '<form action="deletesession.php" method="POST" style="display:inline;">';
+                                echo '<input type="hidden" name="LecturerID" value="' . $db_session['SessionID'] . '"/>';
                                 echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
                                 echo '<a href="#" class="table-link danger">';
                                 echo '<span class="fa-stack">';
@@ -422,6 +481,140 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#programme').change(updateModulesAndLecturers);
+    $('#module').change(function() {
+        updateRooms();
+        getModuleDuration();
+    });
+    $('#starttime').change(calculateEndTime);
+});
+
+
+function updateModulesAndLecturers() {
+    var programmeName = $('#programme').val();
+
+    // AJAX request for Modules
+    $.ajax({
+        url: 'getmodules.php',
+        type: 'POST',
+        data: {programme: programmeName},
+        success: function(data) {
+            $('#module').html(data);
+            // Now update lecturers after modules have been updated
+            updateLecturers(programmeName);
+            $('#module').data('duration', ''); // Clear any previously set duration
+
+            // After updating modules, trigger change event on the module dropdown to automatically select the end time
+            $('#module').trigger('change');
+        },
+        error: function() {
+            alert('Error fetching modules.');
+        }
+    });
+
+    // Initially clear lecturers and rooms dropdowns
+    $('#lecturer').html('<option selected="selected" disabled>Select Lecturer</option>');
+    $('#room').html('<option selected="selected" disabled>Select Room</option>');
+}
+
+function updateLecturers(programmeName) {
+    // If programmeName is not provided, fetch it from the programme dropdown
+    if (!programmeName) {
+        programmeName = $('#programme').val();
+    }
+
+    // AJAX request for Lecturers
+    $.ajax({
+        url: 'getlecturers.php',
+        type: 'POST',
+        data: {programme: programmeName},
+        success: function(data) {
+            $('#lecturer').html(data);
+        },
+        error: function() {
+            alert('Error fetching lecturers.');
+        }
+    });
+}
+
+function updateRooms() {
+    var moduleName = $('#module').val();
+
+    // AJAX request for Rooms
+    $.ajax({
+        url: 'getrooms.php',
+        type: 'POST',
+        data: {module: moduleName},
+        success: function(data) {
+            $('#room').html(data);
+        },
+        error: function() {
+            alert('Error fetching rooms.');
+        }
+    });
+}
+
+function getModuleDuration() {
+    var moduleId = $('#module').val();  // This gets the value of the selected option, which should be the ModuleID
+
+    console.log("Sending Module ID:", moduleId); // Debugging to see what's being sent
+
+    $.ajax({
+        url: 'getmoduleduration.php',
+        type: 'POST',
+        data: { moduleId: moduleId },
+        dataType: 'json',
+        success: function(response) {
+            if (response.duration) {
+                $('#module').data('duration', response.duration);
+                calculateEndTime();  // Recalculate end time when duration is received
+            } else {
+                console.error("No duration found for the module:", response);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Failed to fetch module duration:", status, error);
+        }
+    });
+}
+
+
+
+function calculateEndTime() {
+    var startTime = $('#starttime').val();
+    var duration = $('#module').data('duration');
+    if (!startTime || !duration) {
+        return; // Do not proceed if the start time or duration is not set
+    }
+
+    // Parse the start time and add the duration
+    var startTimeParts = startTime.split(':');
+    var startTimeDate = new Date();
+    startTimeDate.setHours(parseInt(startTimeParts[0]), parseInt(startTimeParts[1]), 0);
+
+    // Adding duration in hours
+    startTimeDate.setHours(startTimeDate.getHours() + parseInt(duration));
+
+    // Formatting the end time to HH:mm format
+    var endHour = startTimeDate.getHours();
+    var endMinutes = startTimeDate.getMinutes();
+    var formattedEndTime = ('0' + endHour).slice(-2) + ':' + ('0' + endMinutes).slice(-2);
+
+    $('#endtime').empty(); // Clear previous options
+    $('#endtime').append($('<option>', {
+        value: formattedEndTime,
+        text: formattedEndTime
+    }));
+    $('#endtime').val(formattedEndTime); // Automatically select the calculated end time
+}
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
 </body>
 </html>
