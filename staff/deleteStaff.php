@@ -22,6 +22,6 @@ if (isset($_POST['LecturerID'])) {
     exit;
 } else {
     // If StudentID isn't set, redirect or show an error
-    echo "Error: StudentID not provided.";
+    echo "Error: StaffID not provided.";
 }
 ?>

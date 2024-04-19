@@ -2,11 +2,11 @@
 include "config.php";
 
 if (isset($_POST['programme'])) {
-    $programmeName = $_POST['programme'];
+    $programmeID = $_POST['programme'];
 
     // Assuming you have a ModuleID column in your modules table
-    $stmt = $connect->prepare("SELECT ModuleID, ModName, ModDuration FROM modules WHERE ProgrammeID = (SELECT ProgrammeID FROM programmes WHERE ProgName = ?)");
-    $stmt->bind_param("s", $programmeName);
+    $stmt = $connect->prepare("SELECT ModuleID, ModName, ModDuration FROM modules WHERE ProgrammeID = ?");
+    $stmt->bind_param("s", $programmeID);
     $stmt->execute();
     $result = $stmt->get_result();
 

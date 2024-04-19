@@ -255,13 +255,14 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                             <?php
                                             include "config.php";
                                             // Query to fetch programme names from the database
-                                            $programmeQuery = "SELECT ProgName FROM programmes";
+                                            $programmeQuery = "SELECT ProgName, ProgrammeID FROM programmes";
                                             $result = mysqli_query($connect, $programmeQuery);
 
                                             // Loop through each row and create an option for the dropdown
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                $programmeName = $row['ProgName'];
-                                                echo "<option value='$programmeName'>$programmeName</option>";
+                                                $programmeName = htmlspecialchars($row['ProgName']);
+                                                $programmeID = $row['ProgrammeID'];
+                                                echo "<option value='$programmeID'>$programmeName</option>";
                                             }
                                             ?>
 
@@ -316,63 +317,42 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
 
                                     <th>
-                                        <button type="submit" class="btn btn-primary btn-lg" name="addNewUser">Add New
-                                            User
-                                        </button>
+                                        <button type="submit" class="btn btn-primary btn-lg" name="createSession"> Create New Session</button>
                                     </th>
                                 </tr>
                             </form>
 
 
 
-                        <?php
-                        if (isset($_POST['addNewUser'])) {
-                            // Handle form submission to add new user
-                            $DATE = $_POST["fullName"];
-                            $Programme = $_POST["Programme"];
-                            $Email = $_POST["E-mail"];
-                            $phone = $_POST["phone"];
-                            include "config.php";
-
-                            // Get ProgrammeID
-                            $queryDptID = "SELECT ProgrammeID FROM programmes WHERE ProgName = ?";
-                            $stmtDptID = $connect->prepare($queryDptID);
-                            $stmtDptID->bind_param("s", $Programme);
-                            $stmtDptID->execute();
-                            $resultDptID = $stmtDptID->get_result();
-                            $db_dpID = $resultDptID->fetch_assoc();
-                            $programmeID = $db_dpID['ProgrammeID'];
-                            $stmtDptID->close();
-
-
-
-                            if ($stmt->num_rows == 0) {
-                                // Email is unique, proceed to insert
-                                $insertQuery = "INSERT INTO sessions (LectName, ProgrammeID, LectEmail, LectPhone) VALUES (?, ?, ?, ?)";
-                                $insertStmt = $connect->prepare($insertQuery);
-                                $insertStmt->bind_param("siss", $fullName, $programmeID, $Email, $phone);
-                                $success = $insertStmt->execute();
-                                
-                                if ($success) {
-                                    echo "<script>alert('User added successfully!');</script>";
-                                    echo "<script>window.location.href = 'session.php';</script>";
-                                } else {
-                                    die("Error inserting new user: " . $connect->error);
+                                <?php
+                                if (isset($_POST['createSession'])) {
+                                    // Handle form submission to add new session
+                                    $DATE = $_POST["Date"];
+                                    $ProgrammeID = $_POST["Programme"];
+                                    $ModuleID = $_POST["Module"];
+                                    $LecturerID = $_POST["Lecturer"];
+                                    $RoomID = $_POST["Room"];
+                                    $Startime = $_POST["Startime"];
+                                    $Endtime = $_POST["Endtime"];
+                                    include "config.php";
+                                    
+                                    // Prepare your insert query
+                                    $insertQuery = "INSERT INTO sessions (ProgrammeID, ModuleID, LecturerID,RoomID, StartTime, EndTime, SessionDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                                    $insertStmt = $connect->prepare($insertQuery);
+                                    $insertStmt->bind_param("iiiisss", $ProgrammeID, $ModuleID,LecturerID, $RoomID, $Startime, $Endtime, $DATE);
+                                    if ($insertStmt->execute()) {
+                                        echo "<script>alert('Session added successfully!'); window.location.href = 'sessions.php';</script>";
+                                    } else {
+                                        die("Error inserting new session: " . $insertStmt->error);
+                                    }
+                                    
+                                    // Close your statement
+                                    $insertStmt->close();
+                                    
+                                    // Optionally, close your database connection if you're done with it
+                                    $connect->close();
                                 }
-                                $insertStmt->close();
-                            } else {
-                                // Email is not unique, alert the user
-                                echo "<script>alert('This email is already in use. Please use another email.');</script>";
-                            }
-                            $stmt->close();
-                        }
-                        ?>
-
-
-
-
-
-
+                                ?>
                         <tr>
                             <th><span>Date</span></th>
                             <th><span>Programme</span></th>
@@ -392,12 +372,13 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                         <?php  /* Staff Table   */
                         include "config.php";
 
-                        $query = "SELECT SessionID,ModName,RoomName,LectName,ProgName,StartTime,EndTime,SessionDate 
-                        FROM sessions 
+                        $query = "SELECT sessions.*, modules.ModName, rooms.RoomName, lecturers.LectName, programmes.ProgName
+                        FROM sessions
+                        JOIN rooms ON sessions.roomID = rooms.RoomID
+                        JOIN programmes ON sessions.ProgrammeID = programmes.ProgrammeID
                         JOIN modules ON sessions.ModuleID = modules.ModuleID
-                        JOIN rooms ON rooms.roomID = sessions.RoomID
-                        JOIN programmes ON modules.ProgrammeID = programmes.ProgrammeID
-                        JOIN lecturers ON programmes.ProgrammeID = lecturers.ProgrammeID;";
+                        JOIN lecturers ON sessions.LecturerID = lecturers.LecturerID
+                        ORDER BY SessionDate DESC, StartTime ASC";
                         $db_sessionInfo = mysqli_query($connect, $query);
                         $db_session = mysqli_fetch_assoc($db_sessionInfo);
 
@@ -417,7 +398,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                   
 
                             echo "<tr>";
-
+                            
                             echo "<td>";
                             echo "<span>$date</span>";
 
@@ -447,7 +428,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
                                 echo '<td style="width: 20%;">';
                                 echo '<form action="deletesession.php" method="POST" style="display:inline;">';
-                                echo '<input type="hidden" name="LecturerID" value="' . $db_session['SessionID'] . '"/>';
+                                echo '<input type="hidden" name="SessionID" value="' . $db_session['SessionID'] . '"/>';
                                 echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
                                 echo '<a href="#" class="table-link danger">';
                                 echo '<span class="fa-stack">';
