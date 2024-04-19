@@ -1,5 +1,6 @@
 <?php
-function checkUserLoggedIn() {
+function checkUserLoggedIn()
+{
     session_start();
 
     if (!isset($_SESSION['username'])) {

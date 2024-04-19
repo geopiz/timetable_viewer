@@ -35,9 +35,6 @@
                             <a class="text-white">Become an Affiliate</a>
                         </p>
                         <p>
-                            <a class="text-white">Shipping Rates</a>
-                        </p>
-                        <p>
                             <a class="text-white">Help</a>
                         </p>
                     </div>
@@ -51,7 +48,6 @@
                         <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
                         <p><i class="fas fa-envelope mr-3"></i> info@gmail.com</p>
                         <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-                        <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
                     </div>
                     <!-- Grid column -->
                 </div>
@@ -59,32 +55,28 @@
             </section>
             <!-- Section: Links -->
 
-            <hr class="my-3">
 
             <!-- Section: Copyright -->
-            <section class="p-3 pt-0">
-                <div class="row d-flex align-items-center">
-                    <!-- Grid column -->
-                    <div class="col-md-7 col-lg-8 text-center text-md-start">
-                        <!-- Copyright -->
-                        <div class="p-3">
-                            © 2024 Copyright:
-                        </div>
-                        <!-- Copyright -->
-                    </div>
-                </div>
-            </section>
+
             <!-- Section: Copyright -->
         </div>
-        <!-- Grid container -->
+        <section class="d-flex justify-content-center border-top pt-3">
+            <div>
+                <div>
+                    © 2024 Copyright:
+                </div>
+            </div>
+        </section>
+
+
     </footer>
-    <!-- Footer -->
+
 </div>
 
 <script>
     var lastScrollPosition = 0;
 
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         var footer = document.getElementById('myFooter');
         var scrollPosition = window.innerHeight + window.scrollY;
 
@@ -97,7 +89,7 @@
             } else {
                 // User is scrolling up
                 footer.style.opacity = '0';
-                setTimeout(function() {
+                setTimeout(function () {
                     footer.style.display = 'none';
                 }, 500); // Delay hiding the footer after opacity transition
             }

@@ -221,6 +221,7 @@ session_start();
             margin-top: 150px;
             margin-bottom: 500px;
         }
+
         @charset "UTF-8";
         /*!
 * Start Bootstrap - Blog Home v5.0.9 (https://startbootstrap.com/template/blog-home)
@@ -12665,18 +12666,14 @@ session_start();
         }
 
 
-
-
     </style>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
 </head>
 <body>
 <title>Glyndwr University Showcase</title>
 <!-- Favicon-->
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
 <!-- Core theme CSS (includes Bootstrap)-->
-<link href="/GlyndwrBlog/css/styles.css" rel="stylesheet"/>
-<?php include '\xampp\htdocs\GlyndwrBlog\pages\header.php'; ?>
 <div class="container custom-margin-top">
     <div class="row">
         <div class="col-lg-12">
@@ -12851,8 +12848,5 @@ session_start();
         </div>
     </div>
 </div>
-<?php
-include '\xampp\htdocs\GlyndwrBlog\pages\footer.php';
-?>
 </body>
 </html>

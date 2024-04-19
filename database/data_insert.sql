@@ -1,4 +1,5 @@
-INSERT INTO Sessions (SessionID, ModuleID, RoomID, StartTime, EndTime, SessionDate) VALUES
+INSERT INTO Sessions (SessionID, ModuleID, RoomID, StartTime, EndTime, SessionDate)
+VALUES
 -- October Sessions for Programme 1
 -- Intro to Programming, Semester 1, Duration 2 hours
 (1, 1, 1, '09:00', '11:00', '2024-10-01'),
@@ -32,148 +33,250 @@ INSERT INTO Sessions (SessionID, ModuleID, RoomID, StartTime, EndTime, SessionDa
 (12, 24, 6, '09:00', '13:00', '2024-03-11');
 
 -- Insert into Departments
-INSERT INTO Departments VALUES
-(1, 'Computer Science', 'Focuses on the study of computer systems and computational processes.'),
-(2, 'Engineering', 'Covers various engineering disciplines including mechanical, civil, and electrical engineering.');
+INSERT INTO Departments
+VALUES (1, 'Computer Science', 'Focuses on the study of computer systems and computational processes.'),
+       (2, 'Engineering',
+        'Covers various engineering disciplines including mechanical, civil, and electrical engineering.');
 
 -- Insert into Programmes
-INSERT INTO Programmes VALUES
-(1, 1, 'BSc Computer Science', 3, 'A bachelor degree in computer science.'),
-(2, 1, 'BSc Cyber Sercurity', 3, 'A bachelor degree in cyber security.'),
-(3, 2, 'BEng Mechanical Engineering', 3, 'A bachelor degree in mechanical engineering.'),
-(4, 2, 'BEng Electrical Engineering', 3, 'A bachelor degree in electrical engineering.');
+INSERT INTO Programmes
+VALUES (1, 1, 'BSc Computer Science', 3, 'A bachelor degree in computer science.'),
+       (2, 1, 'BSc Cyber Sercurity', 3, 'A bachelor degree in cyber security.'),
+       (3, 2, 'BEng Mechanical Engineering', 3, 'A bachelor degree in mechanical engineering.'),
+       (4, 2, 'BEng Electrical Engineering', 3, 'A bachelor degree in electrical engineering.');
 
-INSERT INTO Rooms VALUES
-(1, 'Room 101', 'Lecture Hall', 50),
-(2, 'Room 102', 'Lecture Hall', 25),
-(3, 'Lab 201', 'Computer Lab', 10),
-(4, 'Lab 202', 'Computer Lab', 10),
-(5, 'Room 301', 'Seminar Room', 20),
-(6, 'Room 302', 'Seminar Room', 20);
+INSERT INTO Rooms
+VALUES (1, 'Room 101', 'Lecture Hall', 50),
+       (2, 'Room 102', 'Lecture Hall', 25),
+       (3, 'Lab 201', 'Computer Lab', 10),
+       (4, 'Lab 202', 'Computer Lab', 10),
+       (5, 'Room 301', 'Seminar Room', 20),
+       (6, 'Room 302', 'Seminar Room', 20);
 
-INSERT INTO RoomModules (ModuleID, RoomID) VALUES
+INSERT INTO RoomModules (ModuleID, RoomID)
+VALUES
 -- Semester 1 Modules
-(1, 1), (1, 2), (1, 3), -- Intro to Programming
-(2, 1), (2, 4), (2, 5), -- Computer Systems
-(13, 1), (13, 2), (13, 3), -- Advanced Machine Learning
-(14, 1), (14, 4), (14, 5), -- Big Data Analytics
-(25, 1), (25, 2), (25, 3), -- Engineering Mathematics
-(26, 1), (26, 4), (26, 5), -- Thermodynamics
-(37, 1), (37, 2), (37, 3), -- Electrical Circuits
-(38, 1), (38, 4), (38, 5), -- Electromagnetism
+(1, 1),
+(1, 2),
+(1, 3),  -- Intro to Programming
+(2, 1),
+(2, 4),
+(2, 5),  -- Computer Systems
+(13, 1),
+(13, 2),
+(13, 3), -- Advanced Machine Learning
+(14, 1),
+(14, 4),
+(14, 5), -- Big Data Analytics
+(25, 1),
+(25, 2),
+(25, 3), -- Engineering Mathematics
+(26, 1),
+(26, 4),
+(26, 5), -- Thermodynamics
+(37, 1),
+(37, 2),
+(37, 3), -- Electrical Circuits
+(38, 1),
+(38, 4),
+(38, 5), -- Electromagnetism
 
 -- Semester 2 Modules
-(3, 2), (3, 4), (3, 6), -- Web Development
-(4, 2), (4, 5), (4, 1), -- Database Design
-(15, 2), (15, 4), (15, 6), -- Data Visualization
-(16, 2), (16, 5), (16, 1), -- Statistical Learning
-(27, 2), (27, 4), (27, 6), -- Fluid Mechanics
-(28, 2), (28, 5), (28, 1), -- Mechanical Design
-(39, 2), (39, 4), (39, 6), -- Signals and Systems
-(40, 2), (40, 5), (40, 1), -- Digital Logic Design
+(3, 2),
+(3, 4),
+(3, 6),  -- Web Development
+(4, 2),
+(4, 5),
+(4, 1),  -- Database Design
+(15, 2),
+(15, 4),
+(15, 6), -- Data Visualization
+(16, 2),
+(16, 5),
+(16, 1), -- Statistical Learning
+(27, 2),
+(27, 4),
+(27, 6), -- Fluid Mechanics
+(28, 2),
+(28, 5),
+(28, 1), -- Mechanical Design
+(39, 2),
+(39, 4),
+(39, 6), -- Signals and Systems
+(40, 2),
+(40, 5),
+(40, 1), -- Digital Logic Design
 
 -- Semester 3 Modules
-(5, 3), (5, 5), (5, 1), -- Data Structures
-(6, 3), (6, 6), (6, 2), -- Software Engineering
-(17, 3), (17, 5), (17, 1), -- Deep Learning
-(18, 3), (18, 6), (18, 2), -- Natural Language Processing
-(29, 3), (29, 5), (29, 1), -- Dynamics and Control
-(30, 3), (30, 6), (30, 2), -- Material Science
-(41, 3), (41, 5), (41, 1), -- Microprocessors
-(42, 3), (42, 6), (42, 2), -- Power Electronics
+(5, 3),
+(5, 5),
+(5, 1),  -- Data Structures
+(6, 3),
+(6, 6),
+(6, 2),  -- Software Engineering
+(17, 3),
+(17, 5),
+(17, 1), -- Deep Learning
+(18, 3),
+(18, 6),
+(18, 2), -- Natural Language Processing
+(29, 3),
+(29, 5),
+(29, 1), -- Dynamics and Control
+(30, 3),
+(30, 6),
+(30, 2), -- Material Science
+(41, 3),
+(41, 5),
+(41, 1), -- Microprocessors
+(42, 3),
+(42, 6),
+(42, 2), -- Power Electronics
 
 -- Semester 4 Modules
-(7, 4), (7, 6), (7, 2), -- Operating Systems
-(8, 4), (8, 1), (8, 3), -- Networks and Communications
-(19, 4), (19, 6), (19, 2), -- Cloud Computing for Data Science
-(20, 4), (20, 1), (20, 3), -- Data Ethics and Privacy
-(31, 4), (31, 6), (31, 2), -- Manufacturing Processes
-(32, 4), (32, 1), (32, 3), -- Solid Mechanics
-(43, 4), (43, 6), (43, 2), -- Electrical Machines
-(44, 4), (44, 1), (44, 3), -- Control Systems Engineering
+(7, 4),
+(7, 6),
+(7, 2),  -- Operating Systems
+(8, 4),
+(8, 1),
+(8, 3),  -- Networks and Communications
+(19, 4),
+(19, 6),
+(19, 2), -- Cloud Computing for Data Science
+(20, 4),
+(20, 1),
+(20, 3), -- Data Ethics and Privacy
+(31, 4),
+(31, 6),
+(31, 2), -- Manufacturing Processes
+(32, 4),
+(32, 1),
+(32, 3), -- Solid Mechanics
+(43, 4),
+(43, 6),
+(43, 2), -- Electrical Machines
+(44, 4),
+(44, 1),
+(44, 3), -- Control Systems Engineering
 
 -- Semester 5 Modules
-(9, 5), (9, 1), (9, 3), -- Security Principles
-(10, 5), (10, 2), (10, 4), -- Algorithm Design
-(21, 5), (21, 1), (21, 3), -- Predictive Analytics
-(22, 5), (22, 2), (22, 4), -- Data Mining
-(33, 5), (33, 1), (33, 3), -- CAD and CAM
-(34, 5), (34, 2), (34, 4), -- Thermal Engineering
-(45, 5), (45, 1), (45, 3), -- Communication Systems
-(46, 5), (46, 2), (46, 4), -- Power System Engineering
+(9, 5),
+(9, 1),
+(9, 3),  -- Security Principles
+(10, 5),
+(10, 2),
+(10, 4), -- Algorithm Design
+(21, 5),
+(21, 1),
+(21, 3), -- Predictive Analytics
+(22, 5),
+(22, 2),
+(22, 4), -- Data Mining
+(33, 5),
+(33, 1),
+(33, 3), -- CAD and CAM
+(34, 5),
+(34, 2),
+(34, 4), -- Thermal Engineering
+(45, 5),
+(45, 1),
+(45, 3), -- Communication Systems
+(46, 5),
+(46, 2),
+(46, 4), -- Power System Engineering
 
 -- Semester 6 Modules
-(11, 6), (11, 2), (11, 4), -- Artificial Intelligence
-(12, 6), (12, 3), (12, 5), -- Capstone Project
-(23, 6), (23, 2), (23, 4), -- Data Science Project Management
-(24, 6), (24, 3), (24, 5), -- Capstone Project in Data Science
-(35, 6), (35, 2), (35, 4), -- Robotics
-(36, 6), (36, 3), (36, 5), -- Capstone Project in Mechanical Engineering
-(47, 6), (47, 2), (47, 4), -- Renewable Energy Systems
-(48, 6), (48, 3), (48, 5); -- Capstone Project in Electrical Engineering
+(11, 6),
+(11, 2),
+(11, 4), -- Artificial Intelligence
+(12, 6),
+(12, 3),
+(12, 5), -- Capstone Project
+(23, 6),
+(23, 2),
+(23, 4), -- Data Science Project Management
+(24, 6),
+(24, 3),
+(24, 5), -- Capstone Project in Data Science
+(35, 6),
+(35, 2),
+(35, 4), -- Robotics
+(36, 6),
+(36, 3),
+(36, 5), -- Capstone Project in Mechanical Engineering
+(47, 6),
+(47, 2),
+(47, 4), -- Renewable Energy Systems
+(48, 6),
+(48, 3),
+(48, 5); -- Capstone Project in Electrical Engineering
 
-INSERT INTO Lecturers VALUES
-(1, 'Alice Smith', 1, 'alice.smith@university.edu', '1234567890'),
-(2, 'Bob Jones', 1, 'bob.jones@university.edu', '0987654321'),
-(3, 'Charlie Brown', 2, 'charlie.brown@university.edu', '1122334455'),
-(4, 'Dana White', 2, 'dana.white@university.edu', '2233445566'),
-(5, 'Evan Green', 3, 'evan.green@university.edu', '3344556677'),
-(6, 'Fiona Grey', 3, 'fiona.grey@university.edu', '4455667788'),
-(7, 'George Black', 4, 'george.black@university.edu', '5566778899'),
-(8, 'Hannah Blue', 4, 'hannah.blue@university.edu', '6677889900');
+INSERT INTO Lecturers
+VALUES (1, 'Alice Smith', 1, 'alice.smith@university.edu', '1234567890'),
+       (2, 'Bob Jones', 1, 'bob.jones@university.edu', '0987654321'),
+       (3, 'Charlie Brown', 2, 'charlie.brown@university.edu', '1122334455'),
+       (4, 'Dana White', 2, 'dana.white@university.edu', '2233445566'),
+       (5, 'Evan Green', 3, 'evan.green@university.edu', '3344556677'),
+       (6, 'Fiona Grey', 3, 'fiona.grey@university.edu', '4455667788'),
+       (7, 'George Black', 4, 'george.black@university.edu', '5566778899'),
+       (8, 'Hannah Blue', 4, 'hannah.blue@university.edu', '6677889900');
 
-INSERT INTO Modules (ModuleID, ProgrammeID, ModSemester, ModName, ModDescription, ModDuration) VALUES
-(1, 1, 1, 'Intro to Programming', 'Introduction to programming concepts.', 2),
-(2, 1, 1, 'Computer Systems', 'Overview of computer systems.', 2),
-(3, 1, 2, 'Web Development', 'Design and development of web applications.', 1),
-(4, 1, 2, 'Database Design', 'Principles of database design and implementation.', 3),
-(5, 1, 3, 'Data Structures', 'Introduction to data structures.', 2),
-(6, 1, 3, 'Software Engineering', 'Software development life cycles.', 1),
-(7, 1, 4, 'Operating Systems', 'Concepts and design of operating systems.', 1),
-(8, 1, 4, 'Networks and Communications', 'Fundamentals of computer networking.', 3),
-(9, 1, 5, 'Security Principles', 'Introduction to information security.', 2),
-(10, 1, 5, 'Algorithm Design', 'Algorithm design and complexity.', 3),
-(11, 1, 6, 'Artificial Intelligence', 'Foundations of artificial intelligence.', 2),
-(12, 1, 6, 'Capstone Project', 'Final project integrating course material.', 4),
-(13, 2, 1, 'Advanced Machine Learning', 'Deep dive into machine learning algorithms.', 2),
-(14, 2, 1, 'Big Data Analytics', 'Techniques and tools for analyzing big data.', 3),
-(15, 2, 2, 'Data Visualization', 'Principles of visualizing data effectively.', 1),
-(16, 2, 2, 'Statistical Learning', 'Statistical methods for data analysis.', 2),
-(17, 2, 3, 'Deep Learning', 'Introduction to deep neural networks.', 4),
-(18, 2, 3, 'Natural Language Processing', 'Processing and analyzing human language data.', 2),
-(19, 2, 4, 'Cloud Computing for Data Science', 'Cloud resources for storing and processing data.', 1),
-(20, 2, 4, 'Data Ethics and Privacy', 'Ethical and privacy considerations in data science.', 3),
-(21, 2, 5, 'Predictive Analytics', 'Techniques for making predictions from data.', 1),
-(22, 2, 5, 'Data Mining', 'Discovering patterns and knowledge from large data sets.', 3),
-(23, 2, 6, 'Data Science Project Management', 'Managing data science projects.', 2),
-(24, 2, 6, 'Capstone Project in Data Science', 'Final project applying data science techniques.', 4),
-(25, 3, 1, 'Engineering Mathematics', 'Mathematical foundations for engineers.', 2),
-(26, 3, 1, 'Thermodynamics', 'Study of heat, energy, and work.', 1),
-(27, 3, 2, 'Fluid Mechanics', 'Behavior of fluids in motion and at rest.', 2),
-(28, 3, 2, 'Mechanical Design', 'Design principles in mechanical engineering.', 2),
-(29, 3, 3, 'Dynamics and Control', 'Dynamics of systems and their control mechanisms.', 3),
-(30, 3, 3, 'Material Science', 'Study of materials and their applications in engineering.', 3),
-(31, 3, 4, 'Manufacturing Processes', 'Processes involved in manufacturing.', 4),
-(32, 3, 4, 'Solid Mechanics', 'Behavior of solid matter under external actions.', 2),
-(33, 3, 5, 'CAD and CAM', 'Computer-aided design and manufacturing.', 1),
-(34, 3, 5, 'Thermal Engineering', 'Engineering concerning heat and its transfer.', 1),
-(35, 3, 6, 'Robotics', 'Design, construction, and operation of robots.', 3),
-(36, 3, 6, 'Capstone Project in Mechanical Engineering', 'Integrative project applying mechanical engineering principles.', 2),
-(37, 4, 1, 'Electrical Circuits', 'Fundamentals of electrical circuit analysis.', 2),
-(38, 4, 1, 'Electromagnetism', 'Study of electromagnetic fields and their applications.', 3),
-(39, 4, 2, 'Signals and Systems', 'Analysis of signals and systems.', 2),
-(40, 4, 2, 'Digital Logic Design', 'Design and analysis of digital systems.', 4),
-(41, 4, 3, 'Microprocessors', 'Introduction to microprocessor architecture and programming.', 1),
-(42, 4, 3, 'Power Electronics', 'Conversion and control of electric power with electronic systems.', 2),
-(43, 4, 4, 'Electrical Machines', 'Operation principles of electrical machines.', 3),
-(44, 4, 4, 'Control Systems Engineering', 'Theory and applications of control systems.', 2),
-(45, 4, 5, 'Communication Systems', 'Principles of analog and digital communication systems.', 1),
-(46, 4, 5, 'Power System Engineering', 'Study of the generation, transmission, and distribution of electric power.', 2),
-(47, 4, 6, 'Renewable Energy Systems', 'Technologies and systems for renewable energy.', 3),
-(48, 4, 6, 'Capstone Project in Electrical Engineering', 'Final project integrating electrical engineering concepts.', 4);
+INSERT INTO Modules (ModuleID, ProgrammeID, ModSemester, ModName, ModDescription, ModDuration)
+VALUES (1, 1, 1, 'Intro to Programming', 'Introduction to programming concepts.', 2),
+       (2, 1, 1, 'Computer Systems', 'Overview of computer systems.', 2),
+       (3, 1, 2, 'Web Development', 'Design and development of web applications.', 1),
+       (4, 1, 2, 'Database Design', 'Principles of database design and implementation.', 3),
+       (5, 1, 3, 'Data Structures', 'Introduction to data structures.', 2),
+       (6, 1, 3, 'Software Engineering', 'Software development life cycles.', 1),
+       (7, 1, 4, 'Operating Systems', 'Concepts and design of operating systems.', 1),
+       (8, 1, 4, 'Networks and Communications', 'Fundamentals of computer networking.', 3),
+       (9, 1, 5, 'Security Principles', 'Introduction to information security.', 2),
+       (10, 1, 5, 'Algorithm Design', 'Algorithm design and complexity.', 3),
+       (11, 1, 6, 'Artificial Intelligence', 'Foundations of artificial intelligence.', 2),
+       (12, 1, 6, 'Capstone Project', 'Final project integrating course material.', 4),
+       (13, 2, 1, 'Advanced Machine Learning', 'Deep dive into machine learning algorithms.', 2),
+       (14, 2, 1, 'Big Data Analytics', 'Techniques and tools for analyzing big data.', 3),
+       (15, 2, 2, 'Data Visualization', 'Principles of visualizing data effectively.', 1),
+       (16, 2, 2, 'Statistical Learning', 'Statistical methods for data analysis.', 2),
+       (17, 2, 3, 'Deep Learning', 'Introduction to deep neural networks.', 4),
+       (18, 2, 3, 'Natural Language Processing', 'Processing and analyzing human language data.', 2),
+       (19, 2, 4, 'Cloud Computing for Data Science', 'Cloud resources for storing and processing data.', 1),
+       (20, 2, 4, 'Data Ethics and Privacy', 'Ethical and privacy considerations in data science.', 3),
+       (21, 2, 5, 'Predictive Analytics', 'Techniques for making predictions from data.', 1),
+       (22, 2, 5, 'Data Mining', 'Discovering patterns and knowledge from large data sets.', 3),
+       (23, 2, 6, 'Data Science Project Management', 'Managing data science projects.', 2),
+       (24, 2, 6, 'Capstone Project in Data Science', 'Final project applying data science techniques.', 4),
+       (25, 3, 1, 'Engineering Mathematics', 'Mathematical foundations for engineers.', 2),
+       (26, 3, 1, 'Thermodynamics', 'Study of heat, energy, and work.', 1),
+       (27, 3, 2, 'Fluid Mechanics', 'Behavior of fluids in motion and at rest.', 2),
+       (28, 3, 2, 'Mechanical Design', 'Design principles in mechanical engineering.', 2),
+       (29, 3, 3, 'Dynamics and Control', 'Dynamics of systems and their control mechanisms.', 3),
+       (30, 3, 3, 'Material Science', 'Study of materials and their applications in engineering.', 3),
+       (31, 3, 4, 'Manufacturing Processes', 'Processes involved in manufacturing.', 4),
+       (32, 3, 4, 'Solid Mechanics', 'Behavior of solid matter under external actions.', 2),
+       (33, 3, 5, 'CAD and CAM', 'Computer-aided design and manufacturing.', 1),
+       (34, 3, 5, 'Thermal Engineering', 'Engineering concerning heat and its transfer.', 1),
+       (35, 3, 6, 'Robotics', 'Design, construction, and operation of robots.', 3),
+       (36, 3, 6, 'Capstone Project in Mechanical Engineering',
+        'Integrative project applying mechanical engineering principles.', 2),
+       (37, 4, 1, 'Electrical Circuits', 'Fundamentals of electrical circuit analysis.', 2),
+       (38, 4, 1, 'Electromagnetism', 'Study of electromagnetic fields and their applications.', 3),
+       (39, 4, 2, 'Signals and Systems', 'Analysis of signals and systems.', 2),
+       (40, 4, 2, 'Digital Logic Design', 'Design and analysis of digital systems.', 4),
+       (41, 4, 3, 'Microprocessors', 'Introduction to microprocessor architecture and programming.', 1),
+       (42, 4, 3, 'Power Electronics', 'Conversion and control of electric power with electronic systems.', 2),
+       (43, 4, 4, 'Electrical Machines', 'Operation principles of electrical machines.', 3),
+       (44, 4, 4, 'Control Systems Engineering', 'Theory and applications of control systems.', 2),
+       (45, 4, 5, 'Communication Systems', 'Principles of analog and digital communication systems.', 1),
+       (46, 4, 5, 'Power System Engineering',
+        'Study of the generation, transmission, and distribution of electric power.', 2),
+       (47, 4, 6, 'Renewable Energy Systems', 'Technologies and systems for renewable energy.', 3),
+       (48, 4, 6, 'Capstone Project in Electrical Engineering',
+        'Final project integrating electrical engineering concepts.', 4);
 
 
-INSERT INTO Students (StudentID, StudentName, StudentEmail, ProgrammeID, StudentSemester) VALUES
+INSERT INTO Students (StudentID, StudentName, StudentEmail, ProgrammeID, StudentSemester)
+VALUES
 -- Programme 1, Semester 1
 (1, 'Alex Johnson', 'alex.johnson@university.edu', 1, 1),
 (2, 'Brittany Smith', 'brittany.smith@university.edu', 1, 1),
