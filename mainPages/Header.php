@@ -39,6 +39,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             <li><a class="dropdown-item" href="/students/student.php">Student Panel</a></li>
                             <li><a class="dropdown-item" href="/rooms/rooms.php">Room Panel</a></li>
                             <li><a class="dropdown-item" href="/ProgramModules/programModules.php">Programme Panel</a>
+                            <li><a class="dropdown-item" href="/users/users.php">Create Account</a>
                             </li>
                         </ul>
                     </li>
