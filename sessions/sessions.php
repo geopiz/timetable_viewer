@@ -236,8 +236,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet"/>
     <?php include '../../timetable_viewer/mainPages/Header.php';
-    $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>Sessions Edit Area</span> ";
-    echo "<h1 style='text-align: center; padding-top:50px;'>You're logged in as: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
+    $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>Create a new Session</span> ";
+    echo "<h1 style='text-align: center; padding-top:50px;'>Welcome: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
     ?>
     <div class="container custom-margin-top">
         <div class="row">
@@ -336,10 +336,79 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 $RoomID = $_POST["Room"];
                                 $Startime = $_POST["Startime"];
                                 $Endtime = $_POST["Endtime"];
+                            
                                 include "../config.php";
+                            
+                                // Check if the end time is not beyond 17:00
+                                if ($Endtime > "17:00") {
+                                    die("Error: No lessons can be scheduled after 17:00.");
+                                }
+                            
+                                // Check if lecturer is already scheduled to teach at the selected time
+                                $lecturerCheck = "SELECT COUNT(*) as count FROM sessions
+                                                  WHERE LecturerID = ? AND SessionDate = ? AND NOT (EndTime <= ? OR StartTime >= ?)";
+                                $stmt = $connect->prepare($lecturerCheck);
+                                $stmt->bind_param("isss", $LecturerID, $DATE, $Startime, $Endtime);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $data = $result->fetch_assoc();
+                                if ($data['count'] > 0) {
+                                    die("Error: The same lecturer cannot teach at the same times.");
+                                }
+                            
+                                // Check if room is already in use at the selected time
+                                $roomCheck = "SELECT COUNT(*) as count FROM sessions
+                                              WHERE RoomID = ? AND SessionDate = ? AND NOT (EndTime <= ? OR StartTime >= ?)";
+                                $stmt = $connect->prepare($roomCheck);
+                                $stmt->bind_param("isss", $RoomID, $DATE, $Startime, $Endtime);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $data = $result->fetch_assoc();
+                                if ($data['count'] > 0) {
+                                    die("Error: The same room cannot be used at the same times.");
+                                }
 
-                                // Prepare your insert query
-                                $insertQuery = "INSERT INTO sessions (ProgrammeID, ModuleID, LecturerID,RoomID, StartTime, EndTime, SessionDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                                 // Fetch the room capacity
+                                $roomCapacityQuery = "SELECT RoomCapacity FROM rooms WHERE RoomID = ?";
+                                $stmt = $connect->prepare($roomCapacityQuery);
+                                $stmt->bind_param("i", $RoomID);
+                                $stmt->execute();
+                                $roomResult = $stmt->get_result();
+                                $roomData = $roomResult->fetch_assoc();
+                                $roomCapacity = $roomData['RoomCapacity'];
+
+                                // Fetch the number of students enrolled in the module
+                                $studentCountQuery = "SELECT COUNT(*) as count FROM students 
+                                WHERE ProgrammeID = 
+                                (SELECT ProgrammeID FROM modules WHERE ModuleID = ?)
+                                AND StudentSemester = 
+                                (SELECT ModSemester FROM modules WHERE ModuleID = ?)";
+                                $stmt = $connect->prepare($studentCountQuery);
+                                $stmt->bind_param("ii", $ModuleID, $ModuleID);
+                                $stmt->execute();
+                                $studentResult = $stmt->get_result();
+                                $studentData = $studentResult->fetch_assoc();
+                                $studentCount = $studentData['count'];
+
+                                // Check if the room capacity is exceeded
+                                if ($studentCount > $roomCapacity) {
+                                    die("Error: The number of students exceeds the capacity of the selected room.");
+                                }
+                            
+                                // Check if the module is already scheduled at the same time
+                                $moduleCheck = "SELECT COUNT(*) as count FROM sessions
+                                                WHERE ModuleID = ? AND SessionDate = ? AND NOT (EndTime <= ? OR StartTime >= ?)";
+                                $stmt = $connect->prepare($moduleCheck);
+                                $stmt->bind_param("isss", $ModuleID, $DATE, $Startime, $Endtime);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $data = $result->fetch_assoc();
+                                if ($data['count'] > 0) {
+                                    die("Error: The same lesson cannot be scheduled at the same time.");
+                                }
+                            
+                                // If all checks pass, then insert the new session
+                                $insertQuery = "INSERT INTO sessions (ProgrammeID, ModuleID, LecturerID, RoomID, StartTime, EndTime, SessionDate) VALUES (?, ?, ?, ?, ?, ?, ?)";
                                 $insertStmt = $connect->prepare($insertQuery);
                                 $insertStmt->bind_param("iiiisss", $ProgrammeID, $ModuleID, $LecturerID, $RoomID, $Startime, $Endtime, $DATE);
                                 if ($insertStmt->execute()) {
@@ -347,10 +416,10 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 } else {
                                     die("Error inserting new session: " . $insertStmt->error);
                                 }
-
+                            
                                 // Close your statement
                                 $insertStmt->close();
-
+                            
                                 // Optionally, close your database connection if you're done with it
                                 $connect->close();
                             }
@@ -447,7 +516,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             ?>
                             <script>
                                 function confirmDelete() {
-                                    if (confirm("Are you sure you want to delete this user?")) {
+                                    if (confirm("Are you sure you want to delete this session?")) {
                                         // User confirmed, allow form submission
                                         return true;
                                     } else {

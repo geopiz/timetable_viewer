@@ -237,8 +237,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <title>Glyndwr University Showcase</title>
 
     <?php include '../../timetable_viewer/mainPages/Header.php';
-    $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>Programme Edit Area</span> ";
-    echo "<h1 style='text-align: center; padding-top:50px;'>You're logged in as: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
+    $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>View Programme Info</span> ";
+    echo "<h1 style='text-align: center; padding-top:50px;'>Welcome: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
     ?>
     <div class="container-custom custom-margin-top">
         <form action="" method="POST">

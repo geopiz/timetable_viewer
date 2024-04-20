@@ -6,6 +6,12 @@ checkUserLoggedIn();
 $loggedInUserEmail = $_SESSION['username'];
 $sessionsData = [];
 
+// Assuming $loggedInUserEmail is already defined and properly sanitized.
+if (isset($loggedInUserEmail) && strtolower($loggedInUserEmail) == "admin") {
+    header('Location: sessions/sessions.php');
+    exit; 
+} else {
+    
 // Get the ProgrammeID and StudentSemester for the logged-in student
 $studentInfoStmt = $connect->prepare("SELECT ProgrammeID, StudentSemester FROM students WHERE StudentEmail = ?");
 $studentInfoStmt->bind_param("s", $loggedInUserEmail);
@@ -36,7 +42,7 @@ if ($studentInfo = $studentResult->fetch_assoc()) {
             $types = str_repeat('i', count($moduleIds)); // Types for the bind_param
 
             // Prepare the SQL query with the right number of placeholders
-            $sessionsQuery = "SELECT * FROM sessions join rooms on sessions.RoomID = rooms.RoomID WHERE ModuleID IN ($placeholders)";
+            $sessionsQuery = "SELECT * FROM sessions join rooms on sessions.RoomID = rooms.RoomID join lecturers on sessions.LecturerID = lecturers.LecturerID WHERE ModuleID IN ($placeholders)";
             if ($sessionsStmt = $connect->prepare($sessionsQuery)) {
                 $sessionsStmt->bind_param($types, ...$moduleIds);
                 $sessionsStmt->execute();
@@ -57,6 +63,7 @@ if ($studentInfo = $studentResult->fetch_assoc()) {
                             $sessionsData[] = [
                                 'SessionID' => $session['SessionID'],
                                 'ModuleID' => $session['ModuleID'],
+                                'LectName'=> $session['LectName'],
                                 'ModuleName' => $moduleInfo['ModName'],
                                 'RoomID' => $session['RoomID'],
                                 'RoomName' => $session['RoomName'],
@@ -77,7 +84,7 @@ if ($studentInfo = $studentResult->fetch_assoc()) {
 } else {
     echo "Student not found.";
 }
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -146,6 +153,7 @@ echo "<h1 style='text-align: center; padding-top:50px;'>Welcome <span style='col
                                 <td class="<?= $gradientClass; ?>" rowspan="<?= $duration ?>">
                                     <div class="content">
                                         <strong><?= $session['ModuleName']; ?></strong><br>
+                                        <?= $session['LectName']; ?><br>
                                         <?= $session['RoomName']; ?>
                                     </div>
                                 </td>

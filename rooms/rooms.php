@@ -280,31 +280,67 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             </form>
 
                             <?php
-                            if (isset($_POST['addNewUser'])) {
-                                // Handle form submission to add new user
-                                $roomName = $_POST["roomName"];
-                                $roomType = $_POST["roomType"];
-                                $roomCapacity = $_POST["capacity"];
-                                include "../config.php";
-
-                                // Insert new user into the database
-                                $newUser = "INSERT INTO rooms(RoomName, RoomType, RoomCapacity)
-                VALUES('$roomName', '$roomType','$roomCapacity')";
-
-                                $created = mysqli_query($connect, $newUser);
-                                if ($created) {
-                                    // Display a JavaScript popup message
-                                    echo "<script>alert('Room added successfully!');</script>";
-
-                                    // Redirect or refresh the page to display updated user list
-                                    echo "<script>window.location.href = 'rooms.php';</script>";
-                                    exit();
-                                } else {
-                                    die("Can not connect to server ⛔");
-                                }
-                            }
-                            ?>
-
+                           
+                           if (isset($_POST['addNewUser'])) { // Make sure to change 'addNewUser' to 'addNewRoom' if that's the intended check.
+                               // Handle form submission to add new room
+                               $roomName = $_POST["roomName"];
+                               $roomType = $_POST["roomType"];
+                               $roomCapacity = $_POST["capacity"];
+                               include "../config.php";
+                           
+                               // Begin transaction
+                               mysqli_begin_transaction($connect);
+                           
+                               // Insert new room into the database
+                               $newRoomQuery = "INSERT INTO rooms (RoomName, RoomType, RoomCapacity) VALUES (?, ?, ?)";
+                               $stmt = $connect->prepare($newRoomQuery);
+                               $stmt->bind_param("ssi", $roomName, $roomType, $roomCapacity);
+                               $stmt->execute();
+                               if(!$stmt) {
+                                   // Handle error - insert failed
+                                   mysqli_rollback($connect);
+                                   echo "<script>alert('Failed to add room.');</script>";
+                                   echo "<script>window.location.href = 'rooms.php';</script>";
+                                   exit();
+                               }
+                           
+                               // Get the last inserted room ID
+                               $newRoomId = $stmt->insert_id;
+                           
+                               // Fetch 3 random ModuleIDs
+                               $randomModulesQuery = "SELECT ModuleID FROM modules ORDER BY RAND() LIMIT 15";
+                               $randomModulesResult = mysqli_query($connect, $randomModulesQuery);
+                               if(!$randomModulesResult) {
+                                   // Handle error - query failed
+                                   mysqli_rollback($connect);
+                                   echo "<script>alert('Failed to fetch modules.');</script>";
+                                   echo "<script>window.location.href = 'rooms.php';</script>";
+                                   exit();
+                               }
+                           
+                               // Prepare the roommodules insertion query
+                               $insertRoomModuleQuery = "INSERT INTO roommodules (RoomID, ModuleID) VALUES (?, ?)";
+                               $insertRoomModuleStmt = $connect->prepare($insertRoomModuleQuery);
+                           
+                               // Insert each room-module pair into the roommodules table
+                               while ($moduleRow = mysqli_fetch_assoc($randomModulesResult)) {
+                                   $insertRoomModuleStmt->bind_param("ii", $newRoomId, $moduleRow['ModuleID']);
+                                   $insertRoomModuleStmt->execute();
+                                   if(!$insertRoomModuleStmt) {
+                                       // Handle error - insert failed
+                                       mysqli_rollback($connect);
+                                       echo "<script>alert('Failed to link room with modules.');</script>";
+                                       echo "<script>window.location.href = 'rooms.php';</script>";
+                                       exit();
+                                   }
+                               }
+                           
+                               // If everything is fine, commit the transaction
+                               mysqli_commit($connect);
+                               echo "<script>alert('Room added successfully and linked with 15 modules!');</script>";
+                               echo "<script>window.location.href = 'rooms.php';</script>";
+                           }
+                           ?>
 
                             <tr>
                                 <th><span>Room Name</span></th>

@@ -238,8 +238,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <!-- Icons Library-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <?php include '../../timetable_viewer/mainPages/Header.php';
-    $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>Student Edit Area</span> ";
-    echo "<h1 style='text-align: center; padding-top:50px;'>You're logged in as: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
+    $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>Student Panel</span> ";
+    echo "<h1 style='text-align: center; padding-top:50px;'>Welcome: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
     ?>
 
     <div class="container-custom custom-margin-top">
