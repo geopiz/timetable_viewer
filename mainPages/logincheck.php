@@ -1,7 +1,6 @@
 <?php
 function checkUserLoggedIn()
 {
-    session_start();
 
     if (!isset($_SESSION['username'])) {
         header("Location: /mainPages/login.php");

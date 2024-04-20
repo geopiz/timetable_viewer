@@ -330,6 +330,14 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             if (isset($_POST['createSession'])) {
                                 // Handle form submission to add new session
                                 $DATE = $_POST["Date"];
+                                $dateObject = new DateTime($DATE);
+                                $dayOfWeek = $dateObject->format('w'); // 'w' returns the day of the week (0 for Sunday, 6 for Saturday)
+
+                                if ($dayOfWeek == 0 || $dayOfWeek == 6) {
+                                    die("Error: Lessons cannot be scheduled on weekends.");
+                                }
+
+                                
                                 $ProgrammeID = $_POST["Programme"];
                                 $ModuleID = $_POST["Module"];
                                 $LecturerID = $_POST["Lecturer"];
@@ -660,6 +668,19 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
             }));
             $('#endtime').val(formattedEndTime); // Automatically select the calculated end time
         }
+        
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            var datePicker = document.querySelector('[name="Date"]');
+            datePicker.addEventListener('change', function() {
+                var date = new Date(this.value);
+                var day = date.getDay();
+                if (day === 0 || day === 6) {  // 0 = Sunday, 6 = Saturday
+                    alert("Lessons cannot be scheduled on weekends.");
+                    this.value = ''; // Clear the selected date
+                }
+            });
+        });
 
 
     </script>
