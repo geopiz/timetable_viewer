@@ -15,14 +15,6 @@ $loggedInUserEmail = ucfirst($_SESSION['username']);
 echo "<h1 style='text-align: center; padding-top:100px;'>Welcome <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
 ?>
 
-<!-- Filter Form -->
-<div id="filter-form" class="filter-form" style="text-align: center;">
-    <form method="get" action="">
-        <input type="date" name="date" onchange="this.form.submit()" value="<?php echo isset($_GET['date']) ? $_GET['date'] : date('Y-m-d'); ?>">
-    </form>
-</div>
-
-
 <?php
 include 'config.php';
 include 'mainPages/logincheck.php';
@@ -153,6 +145,12 @@ if (isset($loggedInUserEmail) && strtolower($loggedInUserEmail) == "admin") {
 <div id="container" class="container container-maxwidth">
     <div class="container-timetable">
         <table class="table table-bordered ">
+        <!-- Filter Form -->
+        <div id="filter-form" class="filter-form">
+            <form method="get" action="">
+                <input type="date" name="date" onchange="this.form.submit()" value="<?php echo isset($_GET['date']) ? $_GET['date'] : date('Y-m-d'); ?>">
+            </form>
+        </div>
         <span>Week: <?php echo $startDateFormatted ?> - <?php echo $endDateFormatted ?></span>
             <thead>
             <tr>
