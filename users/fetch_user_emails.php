@@ -1,6 +1,7 @@
 <?php
 include "../config.php"; // Ensure this path is correct
-
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 if(isset($_GET['role'])) {
     $role = $_GET['role'];
     $query = $role === "staff" ? 

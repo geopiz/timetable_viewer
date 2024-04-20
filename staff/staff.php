@@ -1,5 +1,7 @@
 <?php
 session_start();
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 // Check if user is logged in and is an admin
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
@@ -422,4 +424,6 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <?php include '../../timetable_viewer/mainPages/footer.php'; ?>
     </body>
     </html>
-<?php endif; ?>
+<?php endif;
+?>
+

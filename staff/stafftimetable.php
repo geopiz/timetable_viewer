@@ -16,8 +16,7 @@ echo "<h1 style='text-align: center; padding-top:100px;'>Welcome <span style='co
 ?>
 
         <?php
-        include '../mainPages/logincheck.php';
-        checkUserLoggedIn();
+
 
         $loggedInUserEmail = $_SESSION['username'];
         $sessionsData = [];

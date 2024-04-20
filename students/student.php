@@ -1,8 +1,11 @@
 <?php
 session_start();
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 // Check if user is logged in and is an admin
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
+
 ?>
 <?php if ($isAdmin): ?>
     <!doctype html>
@@ -233,7 +236,6 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     </head>
     <body>
     <title>Glyndwr University Timetable</title>
-
     <link rel="stylesheet" href="../css/style.css">
     <!-- Icons Library-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">

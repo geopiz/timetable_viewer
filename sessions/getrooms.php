@@ -1,6 +1,7 @@
 <?php
 include "../config.php";
-
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 if (isset($_POST['module'])) {
     $moduleId = $_POST['module'];  // Expecting the module ID now, not the name
 

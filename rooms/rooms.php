@@ -1,6 +1,7 @@
 <?php
 session_start();
-// Check if user is logged in and is an admin
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 ?>

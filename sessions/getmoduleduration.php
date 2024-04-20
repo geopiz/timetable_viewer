@@ -1,7 +1,8 @@
 <?php
 // Include the database connection file
 include "../config.php";
-
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 // Make sure the moduleId parameter is passed to the script
 if (isset($_POST['moduleId']) && !empty($_POST['moduleId'])) {
     // Retrieve the moduleId from the POST request

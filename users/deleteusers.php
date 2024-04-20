@@ -1,6 +1,7 @@
 <?php
 include "../config.php";
-
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 if (isset($_POST['UserID'])) {
     $UserID = mysqli_real_escape_string($connect, $_POST['UserID']);
 

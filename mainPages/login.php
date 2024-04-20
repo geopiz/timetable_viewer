@@ -39,7 +39,9 @@ if (isset($_POST['login'])) {
 
 <body>
 <div class="login-dark">
+
     <form action="login.php" method="post">
+        <h1 style="text-align: center">Student's Timetable</h1>
         <h2 class="sr-only">Login Form</h2>
         <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
         <div class="form-group"><input class="form-control" type="text" name="username" placeholder="Email"></div>

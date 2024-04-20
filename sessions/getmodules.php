@@ -1,6 +1,7 @@
 <?php
 include "../config.php";
-
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 if (isset($_POST['programme'])) {
     $programmeID = $_POST['programme'];
 

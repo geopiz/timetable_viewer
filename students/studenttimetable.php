@@ -9,17 +9,16 @@
 </head>
 <body>
 <?php
+include '../mainPages/logincheck.php';
 include '../config.php';
 include "../mainPages/Header.php";
 $loggedInUserEmail = ucfirst($_SESSION['username']);
 echo "<h1 style='text-align: center; padding-top:100px;'>Welcome <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
+
 ?>
 
 <?php
-include '../mainPages/logincheck.php';
-checkUserLoggedIn();
 
-$loggedInUserEmail = $_SESSION['username'];
 $sessionsData = [];
 
 if (isset($loggedInUserEmail) && strtolower($loggedInUserEmail) == "admin") {

@@ -2,7 +2,6 @@
 session_start();
 include './mainPages/logincheck.php';
 checkUserLoggedIn();
-
 $loggedInUserEmail = $_SESSION['username'];
 $sessionsData = [];
 $isStudent = isset($_SESSION['role']) && $_SESSION['role'] == 'member';

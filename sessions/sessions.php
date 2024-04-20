@@ -1,5 +1,7 @@
 <?php
 session_start();
+include '../mainPages/logincheck.php';
+checkUserLoggedIn();
 // Check if user is logged in and is an admin
 $isAdmin = isset($_SESSION['role']) && $_SESSION['role'] == 'admin';
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
@@ -236,6 +238,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet"/>
     <?php include '../../timetable_viewer/mainPages/Header.php';
+
     $loggedInUserEmail = ucfirst($_SESSION['username']) . " <br> <span style='color: black; '>Create a new Session</span> ";
     echo "<h1 style='text-align: center; padding-top:50px;'>Welcome: <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
     ?>
@@ -349,7 +352,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                             
                                 // Check if the end time is not beyond 17:00
                                 if ($Endtime > "17:00") {
-                                    die("Error: No lessons can be scheduled after 17:00.");
+                                    echo "<script>alert('Error: No lessons can be scheduled after 17:00.'); window.location.href = 'sessions.php';</script>";
+                                    die("");
                                 }
                             
                                 // Check if lecturer is already scheduled to teach at the selected time
@@ -361,7 +365,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 $result = $stmt->get_result();
                                 $data = $result->fetch_assoc();
                                 if ($data['count'] > 0) {
-                                    die("Error: The same lecturer cannot teach at the same times.");
+                                    echo "<script>alert('The same lecturer cannot teach at the same times.'); window.location.href = 'sessions.php';</script>";
+                                    die();
                                 }
                             
                                 // Check if room is already in use at the selected time
@@ -373,7 +378,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 $result = $stmt->get_result();
                                 $data = $result->fetch_assoc();
                                 if ($data['count'] > 0) {
-                                    die("Error: The same room cannot be used at the same times.");
+                                    echo "<script>alert('Error: The same room cannot be used at the same times.'); window.location.href = 'sessions.php';</script>";
+                                    die();
                                 }
 
                                  // Fetch the room capacity
@@ -400,7 +406,9 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
                                 // Check if the room capacity is exceeded
                                 if ($studentCount > $roomCapacity) {
-                                    die("Error: The number of students exceeds the capacity of the selected room.");
+                                    echo "<script>alert('Error: The number of students exceeds the capacity of the selected room.'); window.location.href = 'sessions.php';</script>";
+                                    die("");
+
                                 }
                             
                                 // Check if the module is already scheduled at the same time
@@ -412,7 +420,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                                 $result = $stmt->get_result();
                                 $data = $result->fetch_assoc();
                                 if ($data['count'] > 0) {
-                                    die("Error: The same lesson cannot be scheduled at the same time.");
+                                    echo "<script>alert('The same lesson cannot be scheduled at the same time.'); window.location.href = 'sessions.php';</script>";
+                                    die("");
                                 }
                             
                                 // If all checks pass, then insert the new session
