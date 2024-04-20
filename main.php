@@ -16,11 +16,12 @@ echo "<h1 style='text-align: center; padding-top:100px;'>Welcome <span style='co
 ?>
 
 <!-- Filter Form -->
-<div id="filter-form" class="filter-form">
+<div id="filter-form" class="filter-form" style="text-align: center;">
     <form method="get" action="">
         <input type="date" name="date" onchange="this.form.submit()" value="<?php echo isset($_GET['date']) ? $_GET['date'] : date('Y-m-d'); ?>">
     </form>
 </div>
+
 
 <?php
 include 'config.php';
@@ -57,6 +58,8 @@ if (isset($loggedInUserEmail) && strtolower($loggedInUserEmail) == "admin") {
     
     $startDate = $startOfWeek->format('Y-m-d');
     $endDate = $endOfWeek->format('Y-m-d');
+    $startDateFormatted = date('m/d/y', strtotime($startDate));
+    $endDateFormatted = date('m/d/y', strtotime($endDate));
 
     $studentInfoStmt = $connect->prepare("SELECT ProgrammeID, StudentSemester FROM students WHERE StudentEmail = ?");
     $studentInfoStmt->bind_param("s", $loggedInUserEmail);
@@ -150,6 +153,7 @@ if (isset($loggedInUserEmail) && strtolower($loggedInUserEmail) == "admin") {
 <div id="container" class="container container-maxwidth">
     <div class="container-timetable">
         <table class="table table-bordered ">
+        <span>Week: <?php echo $startDateFormatted ?> - <?php echo $endDateFormatted ?></span>
             <thead>
             <tr>
                 <th>Time / Day</th>
