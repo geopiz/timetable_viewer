@@ -93,7 +93,7 @@ if ($studentInfo = $studentResult->fetch_assoc()) {
 
 <?php
 include "mainPages/Header.php";
-$loggedInUserEmail = $_SESSION['username'];
+$loggedInUserEmail = ucfirst($_SESSION['username']);
 echo "<h1 style='text-align: center; padding-top:50px;'>Welcome <span style='color: #5eb7b7'>$loggedInUserEmail</span></h1>";
 ?>
 
@@ -131,12 +131,12 @@ echo "<h1 style='text-align: center; padding-top:50px;'>Welcome <span style='col
                             $duration = $durationHours + ($durationMinutes > 0 ? 1 : 0); // Calculate duration including minutes
 
                             $gradientClasses = [
-                                'accent-green-gradient',
-                                'accent-blue-gradient',
-                                'accent-orange-gradient',
-                                'accent-cyan-gradient',
-                                'accent-pink-gradient',
-                                'accent-purple-gradient'
+                                'green-gradient',
+                                'blue-gradient',
+                                'orange-gradient',
+                                'cyan-gradient',
+                                'pink-gradient',
+                                'purple-gradient'
                             ];
                             $gradientClass = $gradientClasses[rand(0, count($gradientClasses) - 1)];
 

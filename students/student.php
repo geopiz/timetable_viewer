@@ -232,10 +232,8 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
         </style>
     </head>
     <body>
-    <title>Glyndwr University Showcase</title>
-    <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
+    <title>Glyndwr University Timetable</title>
+
     <link rel="stylesheet" href="../css/style.css">
     <!-- Icons Library-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">

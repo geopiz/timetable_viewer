@@ -12670,9 +12670,7 @@ session_start();
 
 </head>
 <body>
-<title>Glyndwr University Showcase</title>
-<!-- Favicon-->
-<link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
+<title>Glyndwr University Timetable</title>
 <!-- Core theme CSS (includes Bootstrap)-->
 <div class="container custom-margin-top">
     <div class="row">

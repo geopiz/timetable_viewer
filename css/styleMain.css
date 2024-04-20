@@ -1,68 +1,69 @@
-.accent-pink-gradient,
-.accent-cyan-gradient,
-.accent-orange-gradient,
-.accent-green-gradient,
-.accent-blue-gradient,
-.accent-purple-gradient {
+.pink-gradient,
+.cyan-gradient,
+.orange-gradient,
+.green-gradient,
+.blue-gradient,
+.purple-gradient {
     height: 100%;
     transition: 0.2s ease box-shadow, 0.2s ease transform;
 }
 
-.accent-pink-gradient {
-    background: red;
+.pink-gradient {
+    background: linear-gradient(135deg, #ee8ebc, #eea08e);
+
 }
 
-.accent-pink-gradient:hover {
-    background: red;
+.pink-gradient:hover {
+    background: linear-gradient(135deg, #ee8ebc, #eea08e);
     box-shadow: 0 20px 30px 0 rgba(238, 142, 188, 0.3);
     transform: scale(1.05);
 }
 
-.accent-cyan-gradient {
+.cyan-gradient {
     background: linear-gradient(135deg, #8eeec0, #8edcee);
 }
 
-.accent-cyan-gradient:hover {
+.cyan-gradient:hover {
     background: linear-gradient(135deg, #8eeec0, #8edcee);
     box-shadow: 0 20px 30px 0 rgba(142, 238, 192, 0.3);
     transform: scale(1.05);
 }
 
-.accent-orange-gradient {
+.orange-gradient {
     background: linear-gradient(135deg, #eec08e, #dcee8e);
 }
 
-.accent-orange-gradient:hover {
+.orange-gradient:hover {
     background: linear-gradient(135deg, #eec08e, #dcee8e);
     box-shadow: 0 20px 30px 0 rgba(238, 192, 142, 0.3);
     transform: scale(1.05);
 }
 
-.accent-green-gradient {
+.green-gradient {
     background: linear-gradient(135deg, #bcee8e, #8eeea0);
 }
 
-.accent-green-gradient:hover {
+.green-gradient:hover {
     background: linear-gradient(135deg, #bcee8e, #8eeea0);
     box-shadow: 0 20px 30px 0 rgba(188, 238, 142, 0.3);
     transform: scale(1.05);
 }
 
-.accent-blue-gradient {
+.blue-gradient {
     background: linear-gradient(135deg, #8ebcee, #a08eee);
 }
 
-.accent-blue-gradient:hover {
+.blue-gradient:hover {
     background: linear-gradient(135deg, #8ebcee, #a08eee);
     box-shadow: 0 20px 30px 0 rgba(142, 188, 238, 0.3);
     transform: scale(1.05);
 }
 
-.accent-purple-gradient {
+.purple-gradient {
     background: linear-gradient(135deg, #c08eee, #ee8edc);
 }
 
-.accent-purple-gradient:hover {
+.purple-gradient:hover {
     background: linear-gradient(135deg, #c08eee, #ee8edc);
     box-shadow: 0 20px 30px 0 rgba(192, 142, 238, 0.3);
     transform: scale(1.05);
