@@ -16,7 +16,7 @@ if (isset($_POST['login'])) {
         $_SESSION['username'] = $user['UserName'];
         $_SESSION['role'] = $user['Role'];
         // Redirect to the main page or dashboard
-        header("Location: /main.php");
+        header("Location: /index.php");
         exit();
     } else {
         echo "<script>alert('Invalid Username or Password');</script>";
