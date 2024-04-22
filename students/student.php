@@ -236,7 +236,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
     </head>
     <body>
     <title>Glyndwr University Timetable</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
     <!-- Icons Library-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <?php include '../../timetable_viewer/mainPages/Header.php';

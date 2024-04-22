@@ -228,7 +228,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
             }
 
         </style>
-        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
 
     </head>
     <body>
