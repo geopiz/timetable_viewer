@@ -1,7 +1,6 @@
 <?php
 session_start();
 include "../config.php";
-include 'Header.php';
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
