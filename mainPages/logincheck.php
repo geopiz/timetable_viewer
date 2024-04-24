@@ -1,4 +1,3 @@
-<link href="/css/styles.css" rel="stylesheet"/>
 <?php
 function checkUserLoggedIn()
 {
@@ -17,9 +16,8 @@ function checkUserLoggedIn()
         // Redirect the user to the login page
         header("Refresh: 3; URL=\mainPages\login.php"); // Redirect after 3 seconds
         exit(); // Stop further execution of the script
+
     }
 }
-
-
 
 ?>

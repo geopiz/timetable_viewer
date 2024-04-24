@@ -1,5 +1,6 @@
 <?php
-include "../config.php"; // Ensure this path is correct
+session_start();
+include "../config.php";
 include '../mainPages/logincheck.php';
 checkUserLoggedIn();
 if(isset($_GET['role'])) {

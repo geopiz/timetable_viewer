@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../config.php";
 include '../mainPages/logincheck.php';
 checkUserLoggedIn();
@@ -25,4 +26,3 @@ if (isset($_POST['LecturerID'])) {
     // If StudentID isn't set, redirect or show an error
     echo "Error: StaffID not provided.";
 }
-?>

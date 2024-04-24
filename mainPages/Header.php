@@ -9,10 +9,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 <!doctype html>
 <html lang="en">
 <head>
-
     <title>Glyndwr Timetable</title>
-
-
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -48,9 +45,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
                 <!-- Display the username -->
                 <?php if (!$isAdmin): ?>
                     <li class="nav-link" style="color: #5eb7b7">
-
                         <?php echo htmlspecialchars($username); ?>
-
                     </li>
                 <?php endif; ?>
 

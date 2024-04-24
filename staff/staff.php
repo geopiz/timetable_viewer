@@ -386,7 +386,7 @@ $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest';
 
 
                                 echo '<td style="width: 20%;">';
-                                echo '<form action="deletestaff.php" method="POST" style="display:inline;">';
+                                echo '<form action="deleteStaff.php" method="POST" style="display:inline;">';
                                 echo '<input type="hidden" name="LecturerID" value="' . $db_staff['LecturerID'] . '"/>';
                                 echo '<button type="submit" class="table-link danger" style="border: none; background: none; padding: 0;" onclick="return confirmDelete()">';
                                 echo '<a href="#" class="table-link danger">';
